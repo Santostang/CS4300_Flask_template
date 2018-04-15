@@ -1,5 +1,6 @@
 import os, csv, math, re
 import pprint
+from math import radians, cos, sin, asin, sqrt
 
 def load_data():
     """
@@ -69,11 +70,11 @@ def handle_query(query, default_ranking,reviews):
     if 'difficulty' in query:
         valid = filter_difficulty(valid, query['difficulty'])
     if 'start_altitude' in query:
-        valid = filter_start_altitude(valid, query['start_altitude'])
+        valid = filter_start_altitude(valid, query['elevationStart'])
     if 'max_altitude' in query:
-        valid = filter_max_altitude(valid, query['max_altitude'])
+        valid = filter_max_altitude(valid, query['elevationMax'])
     if 'change_altitude' in query:
-        valid = filter_change_altitude(valid, query['change_altitude'])
+        valid = filter_change_altitude(valid, query['elevationGain'])
     if 'tags' in query:
         valid = filter_tags(valid, query['tags'])
     if 'routetypes' in query:
@@ -135,19 +136,24 @@ def make_ranking(valid, trail, keywords, reviews):
         scored = [(t, kwds[t] + trls[t]) for t in valid]
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
 
-def filter_states():
+def filter_states(valid, state):
     """
 
     :return:
     """
-    pass
+    return [x for x in valid if state in x['states']]
 
-def filter_distance():
+def filter_distance(valid, query):
     """
 
     :return:
     """
-    pass
+    distance = float(query[0])
+    location = query[1] #contains lat & lon
+    lat = float(location[0])
+    lon = float(location[1])
+    return [x for x in valid if haversine(float(x['longitude']), float(x['latitude']), lon, lat) <= distance]
+
 
 def filter_length(valid, length):
     """
@@ -161,47 +167,83 @@ def filter_length(valid, length):
     else:
         return [x for x in valid if float(length[1]) >= float(x['length']) > float(length[0])]
 
-def filter_difficulty():
+def filter_difficulty(valid, difficulty):
     """
 
     :return:
     """
-    pass
+    if difficulty[0] is None:
+        return [x for x in valid if int(x['difficulty']) <= int(difficulty[1])]
+    elif difficulty[1] is None:
+        return [x for x in valid if int(x['difficulty']) > int(difficulty[0])]
+    else:
+        return [x for x in valid if int(difficulty[1]) >= int(x['difficulty']) > int(difficulty[0])]
 
-def filter_start_altitude():
+def filter_start_altitude(valid, start_altitude):
     """
 
     :return:
     """
-    pass
+    if start_altitude[0] is None:
+        return [x for x in valid if float(x['elevationStart']) <= float(start_altitude[1])]
+    elif start_altitude[1] is None:
+        return [x for x in valid if float(x['elevationStart']) > float(start_altitude[0])]
+    else:
+        return [x for x in valid if float(start_altitude[1]) >= float(x['elevationStart']) > float(start_altitude[0])]
 
-def filter_max_altitude():
+def filter_max_altitude(valid, max_altitude):
     """
 
     :return:
     """
-    pass
+    if max_altitude[0] is None:
+        return [x for x in valid if float(x['elevationMax']) <= float(max_altitude[1])]
+    elif max_altitude[1] is None:
+        return [x for x in valid if float(x['elevationMax']) > float(max_altitude[0])]
+    else:
+        return [x for x in valid if float(max_altitude[1]) >= float(x['elevationMax']) > float(max_altitude[0])]
 
-def filter_change_altitude():
+def filter_change_altitude(valid, change_altitude):
     """
 
     :return:
     """
-    pass
+    if change_altitude[0] is None:
+        return [x for x in valid if float(x['elevationGain']) <= float(change_altitude[1])]
+    elif change_altitude[1] is None:
+        return [x for x in valid if float(x['elevationGain']) > float(change_altitude[0])]
+    else:
+        return [x for x in valid if float(change_altitude[1]) >= float(x['elevationGain']) > float(change_altitude[0])]
 
-def filter_tags():
+def filter_tags(valid, tag):
     """
 
     :return:
     """
-    pass
+    return [x for x in valid if tag in x['features'] or x['activities'] or x['obstacles']]
 
-def filter_routetypes():
+def filter_routetypes(valid, routetypes):
     """
 
     :return:
     """
-    pass
+    return [x for x in valid if routetypes in x['rountType']]
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a))
+    # Radius of earth in miles is 6371
+    miles = 3,959 * c
+    return miles
 
 if __name__ == '__main__':
     trail = load_data()
