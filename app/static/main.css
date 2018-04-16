@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
+@media (min-width: 1200px) {
+.container {
+    max-width: 970px;
+}
+}
+@media (min-width:400px){
+.global-search {
+    padding: 20px 0;
+    text-align:center;
+}
+body {
+    /* background-image: url("bg_image.jpg");  */
+    background-image: url("https://www.google.com/search?q=cool+hiking&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi_3a2cv7_aAhVLGt8KHSN3DdUQ_AUICigB&biw=1238&bih=780#imgrc=yDU2CyiukPpHaM:");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    /* background-color: lightgreen; */
+    padding-top: 15%;
+    padding-bottom: 15px;
+    font-family: 'Ubuntu', sans-serif;
+}
+h3 {
+    color: grey;
+}
+.global-search {
+    text-align:center;
+    padding:10px;
+}
+.global-search .form-control {
+    size:5;
+    padding: 10px;
+}
+.global-search * {
+    display:inline-block;
+    margin-bottom:0;
+}
+}
+.topcorner{
+    position:absolute;
+    top:2%;
+    right:2%;
+}
+.btn{
+    background-color: #4285F4;
+    border: none
+}
+.step-links a{
+color: #4285F4;
+}
+.tag_btn{
+    background: #ccc;
+} .btn:focus{
+    background: red;
+}
