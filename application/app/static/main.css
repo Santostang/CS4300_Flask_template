@@ -11,20 +11,21 @@
     text-align:center;
 }
 body {
-    /* background-image: url("https://www.squareroot.design/wp-content/uploads/2017/09/21577189_278650105985697_1054408333659734016_n.jpg"); */
-    /* background-color: red; */
+    /* background-image: url("bg_image.jpg");  */
+    background-image: url("https://www.google.com/search?q=cool+hiking&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi_3a2cv7_aAhVLGt8KHSN3DdUQ_AUICigB&biw=1238&bih=780#imgrc=yDU2CyiukPpHaM:");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    /* background-color: lightgreen; */
     padding-top: 15%;
     padding-bottom: 15px;
     font-family: 'Ubuntu', sans-serif;
-    /* min-height: 100%; */
 }
 h3 {
-    color: red;
+    color: grey;
 }
 .global-search {
     text-align:center;
     padding:10px;
-    text-color: grey;
 }
 .global-search .form-control {
     size:5;
