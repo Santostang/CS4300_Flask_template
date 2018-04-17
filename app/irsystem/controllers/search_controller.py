@@ -18,9 +18,14 @@ def search():
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
 	  	#print(query)
 	  	ranking = handle_query(query, default, reviews)
-		return render_template('search.html',  data=ranking[:3])
+		return redirect(url_for('irsystem.result', r1=ranking[0], r2=ranking[1]))
 	else:
 		return render_template('search.html')
 
 
 
+@irsystem.route('irsystem.result', methods=["GET","POST"])
+def result():
+	r1 = request.args.get('r1')
+	r2 = request.args.get('r2')
+	return 'This is the result page. Trail ID is: ' + '</br> </br>' + str(r1) + '</br> </br>' + str(r2)
