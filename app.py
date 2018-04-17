@@ -19,7 +19,7 @@ def search():
 	  	return render_template('search.html', data=ranking[:2])
 	  	#return redirect(url_for('result', r1=ranking[0]))
 
-@app.route('/result', methods=["GET","POST"])
+#@app.route('/result', methods=["GET","POST"])
 def result():
 	r1 = request.args.get('r1')
 	return 'This is the result page. Trail ID is: ' + str(r1)
