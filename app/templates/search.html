@@ -3,6 +3,8 @@
     <head>
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="script.js"></script>
     </head>
     <!-- <body style="background-image: url(http://moziru.com/images/climbing-tree-clipart-mountain-trekking-3.jpg);
         background-repeat: no-repeat;
@@ -56,14 +58,14 @@
             <br>
 
             <h3>tagged as </h3>
-                <button type="submit" class="tag_btn btn-warning" value="Trail Running">Trail Running</button>
-                <button type="submit" value="Birding" onclick = >Birding</button>
-                <button type="submit" value="Hiking">Hiking</button>
-                <button type="submit" value="Nature Trips">Nature Trips</button>
-                <button type="submit" value="Paddle Sports">Paddle Sports</button>
-                <button type="submit" value="Rock Climbing">Rock Climbing</button>
-                <button type="submit" value="Snowshoeing">Snowshoeing</button>
-                <button type="submit" value="Walking">Walking</button>
+                <input type="button" class="tag_btn btn-warning" value="Trail Running">Trail Running</button>
+                <input type="button" value="Birding" onclick = "this.style.color='#000000'" />
+                <input type="button" value="Hiking">Hiking</button>
+                <input type="button" value="Nature Trips">Nature Trips</button>
+                <input type="button" value="Paddle Sports">Paddle Sports</button>
+                <input type="button" value="Rock Climbing">Rock Climbing</button>
+                <input type="button" value="Snowshoeing">Snowshoeing</button>
+                <input type="button" value="Walking">Walking</button>
             <br>
 
             <h3>with a starting altitude greater than </h3>
@@ -79,7 +81,7 @@
             <br>
 
             <br>
-            <button type="submit" class="btn btn-info"> Go Find Me Some Amazing Trails! </button>
+            <button type="submit" class="btn btn-submit"> Go Find Me Some Amazing Trails! </button>
         </form>
 
 
