@@ -5,7 +5,7 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 project_name = "Ilan's Cool Project Template"
 net_id = "Ilan Filonenko: if56"
 
-@irsystem.route('/', methods=['GET'])
+@irsystem.route('/', methods=['GET', 'POST'])
 def search():
 	query = request.args.get('search')
 	if not query:
