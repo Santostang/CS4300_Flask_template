@@ -144,9 +144,46 @@ def calc_trail_similarity(valid, trail, reviews):
         kmag = math.sqrt(sum([kwords[0][w]*kwords[0][w] for w in kwords[0]]))
         return dot / (tmag * kmag)
     def score_trail(t, v):
-        #TODO calculate trail feature similarity
-        return 0
-        pass
+        dot = 0
+        magT = 0
+        magV = 0
+        for f,func in [('avgRating',float), ('difficulty',int), ('duration',int), \
+                    ('elevationGain',float), ('elevationMax',float), ('elevationStart',float), ('length',float)]:
+            if f not in t or f not in v:
+                continue
+            if t[f] is None or v[f] is None:
+                continue
+            dot = dot + (func(t[f]) / func(v[f]) if func(t[f]) < func(v[f]) else func(v[f]) / func(t[f]))
+            magT = magT + func(t[f]) ** 2
+            magV = magV + func(v[f]) ** 2
+        for f,fields in [
+                ('activities',
+                    ['Snowshoeing', 'Surfing', 'Cross Country Skiing', 'Fishing', 'Horseback Riding', 'Scenic Driving',
+                    'Off Road Driving', 'Skiing', 'Paddle Sports', 'Walking', 'Hiking', 'Camping', 'Mountain Biking',
+                    'Birding', 'Trail Running', 'Backpacking', 'Road Biking', 'Rock Climbing', 'Nature Trips']),
+                ('features',
+                     ['Waterfall', 'Cave', 'Kids', 'Dogs', 'City Walk', 'Dogs Leash', 'Dogs No', 'Historic Site', 
+                     'Rails Trails', 'Views', 'Wild Flowers', 'Lake', 'Wildlife', 'Hot Springs', 'River', 'Forest',
+                     'Beach', 'ADA']),
+                ('obstacles',
+                     ['Rocky', 'Over Grown', 'Bridge Out', 'No Shade', 'Old Growth', 'Washed Out', 'Closed', 'Scramble',
+                     'Muddy', 'Blowdown', 'Private Property', 'Off Trail', 'Snow', 'Bugs'])
+                ('routeType',
+                     ['Loop', 'Out & Back', 'Point to Point'])
+                ]:
+            for c in fields:
+                a = False
+                b = False
+                if c in t[f]:
+                    magT = magT + 1
+                    a = True
+                if c in v[f]:
+                    magV = magV + 1
+                    b = True
+                if a and b:
+                    dot = dot + 1
+
+        return dot / (sqrt(magT) * sqrt(magV))
     def score(vt, vr, tt, tr):
         # trail to trail similarity
         # TODO discuss weighting
