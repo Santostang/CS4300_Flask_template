@@ -12,7 +12,7 @@
         <p>Project Name: Trailgle</p>
         <p>Student Name:  st883, xt222, zl329, ebl48 </p>
     </div>
-        <form class= "global-search">
+        <form class= "global-search" method="post">
             <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
                 FIND 
                 <!-- <font color=#FBBC05>the </font> -->
@@ -25,28 +25,28 @@
 
             <h3>similar to</h3>
             <div class="form-group">
-                <input id="input" type="text" name="search" size="40" placeholder="Enter trail name ">
+                <input id="trail_name" type="text" name="trail_name" value= "{{request.form.trail_name}}" size="40" placeholder="Enter trail name ">
             </div>
             <br>
 
             <h3>with keyword</h3>
             <div class="form-group">
-                <input id="input" type="text" name="search" size = "40" placeholder="e.g. waterfall, children-friendly">
+                <input id="keyword" type="text" name="keyword" value= "{{request.form.keyword}}" size = "40" placeholder="e.g. waterfall, children-friendly">
             </div>
             <br>
 
             <div class="form-group">
                 <h3>within </h3>
-                <input id="input" type="text" name="search" size = "10" placeholder="distance">
+                <input id="distance" type="text" name="distance" value= "{{request.form.distance}}" size = "10" placeholder="distance">
                 <h3>miles of  </h3> 
-                <input id="input" type="text" name="search" size="25" placeholder="Enter City Name">
+                <input id="city" type="text" name="city" value= "{{request.form.city}}" size="25" placeholder="Enter City Name">
                 <h3>, </h3>
-                <input id="input" type="text" name="search" size="10" placeholder="State">
+                <input id="state" type="text" name="state" value= "{{request.form.state}}" size="10" placeholder="State">
             </div>
             <br>
 
             <h3>with difficulty of </h3>
-            <select name="tags" >
+            <select name="difficulty" >
                 <option value="" selected disabled hidden>Choose here</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -67,9 +67,9 @@
             <br>
 
             <h3>with a starting altitude greater than </h3>
-            <input id="input" type="text" name="search" size = "10" placeholder="ft">
+            <input id="start_altitude_lb" type="text" name="start_altitude_lb" value= "{{request.form.start_altitude_lb}}" size = "10" placeholder="ft">
             <h3>and smaller than  </h3> 
-            <input id="input" type="text" name="search" size="10" placeholder="ft">
+            <input id="start_altitude_ub" type="text" name="start_altitude_ub" value= "{{request.form.start_altitude_ub}}" size="10" placeholder="ft">
 
             <br>
             <h3>with route type of  </h3>
