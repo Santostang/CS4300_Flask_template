@@ -15,10 +15,9 @@ def search():
 	  	#query['city'] = request.form['city']
 	  	#query['state'] = request.form['state']
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
-	  	print(query)
 	  	ranking = handle_query(query, default, reviews)
-	  	print(ranking[:3])
-	  	return redirect(url_for('result', r1=ranking[0]))
+	  	return render_template('search.html', data=ranking[:2])
+	  	#return redirect(url_for('result', r1=ranking[0]))
 
 @app.route('/result', methods=["GET","POST"])
 def result():
