@@ -10,3 +10,4 @@ class Base(db.Model):
   id         = db.Column(db.Integer, primary_key =True)
   created_at = db.Column(db.DateTime, default    =db.func.current_timestamp())
   updated_at = db.Column(db.DateTime, default    =db.func.current_timestamp())
+

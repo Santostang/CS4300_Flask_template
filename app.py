@@ -5,7 +5,7 @@ import os, csv, math, re
 import pprint
 from math import radians, cos, sin, asin, sqrt
 
-@app.route('/', methods=["GET","POST"])
+#@app.route('/', methods=["GET","POST"])
 def search():
 	query = {}
 	if request.method == "POST":
@@ -20,7 +20,7 @@ def search():
 	  	print(ranking[:3])
 	  	return redirect(url_for('result', r1=ranking[0]))
 
-@app.route('/result', methods=["GET","POST"])
+#@app.route('/result', methods=["GET","POST"])
 def result():
 	r1 = request.args.get('r1')
 	return 'This is the result page. Trail ID is: ' + str(r1)
@@ -324,9 +324,9 @@ def haversine(lon1, lat1, lon2, lat2):
     return miles
 
 if __name__ == "__main__":
-	trail = load_data()
-  	default = calc_default(trail)
-  	reviews = load_reviews()
+	#trail = load_data()
+  	#default = calc_default(trail)
+  	#reviews = load_reviews()
   	print ("Flask app running at http://0.0.0.0:5000")
   	socketio.run(app, host="0.0.0.0", port=5000)
 
