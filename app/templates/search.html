@@ -3,52 +3,45 @@
     <head>
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="script.js"></script>
     </head>
-    <!-- <body style="background-image: url(http://moziru.com/images/climbing-tree-clipart-mountain-trekking-3.jpg);
-        background-repeat: no-repeat;
-        background-size: 100%;"> -->
     <body>
-    <div class="topcorner">
-        <p>Project Name: Trailgle</p>
-        <p>Student Name:  st883, xt222, zl329, ebl48 </p>
-    </div>
-        <form class= "global-search" method="post">
-            <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
-                FIND 
-                <!-- <font color=#FBBC05>the </font> -->
-                <font color=#34A853>TRAILS</font>
-                <font color=#FBBC05>that</font>
-                <font color=#FBBC05>are</font>
-            </h1>
-            
-            <br><br>
+
+        <div class="topcorner">
+            <p>Project Name: Trailgle</p>
+            <p>Student Name:  st883, xt222, zl329, ebl48 </p>
+        </div>
+
+        <div class='title'>
+            <h1>Traigle</h1>
+            <p>Recommend trails for you</p>
+        </div>
+
+        <form class= "global-search">
 
             <h3>similar to</h3>
             <div class="form-group">
-                <input id="trail_name" type="text" name="trail_name" value= "{{request.form.trail_name}}" size="40" placeholder="Enter trail name ">
+                <input id="input" type="text" name="search" size="40" placeholder="Enter trail name ">
             </div>
             <br>
 
             <h3>with keyword</h3>
             <div class="form-group">
-                <input id="keyword" type="text" name="keyword" value= "{{request.form.keyword}}" size = "40" placeholder="e.g. waterfall, children-friendly">
+                <input id="input" type="text" name="search" size = "40" placeholder="e.g. waterfall, children-friendly">
             </div>
             <br>
 
             <div class="form-group">
                 <h3>within </h3>
-                <input id="distance" type="text" name="distance" value= "{{request.form.distance}}" size = "10" placeholder="distance">
+                <input id="input" type="text" name="search" size = "10" placeholder="distance">
                 <h3>miles of  </h3> 
-                <input id="city" type="text" name="city" value= "{{request.form.city}}" size="25" placeholder="Enter City Name">
+                <input id="input" type="text" name="search" size="25" placeholder="Enter City Name">
                 <h3>, </h3>
-                <input id="state" type="text" name="state" value= "{{request.form.state}}" size="10" placeholder="State">
+                <input id="input" type="text" name="search" size="10" placeholder="State">
             </div>
             <br>
 
             <h3>with difficulty of </h3>
-            <select name="difficulty" >
+            <select name="tags" >
                 <option value="" selected disabled hidden>Choose here</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -58,20 +51,20 @@
             <br>
 
             <h3>tagged as </h3>
-                <input type="button" class="tag_btn btn-warning" value="Trail Running">Trail Running</button>
-                <input type="button" value="Birding" onclick = "this.style.color='#000000'" />
-                <input type="button" value="Hiking"></button>
-                <input type="button" value="Nature Trips"></button>
-                <input type="button" value="Paddle Sports"></button>
-                <input type="button" value="Rock Climbing"></button>
-                <input type="button" value="Snowshoeing"></button>
-                <input type="button" value="Walking"></button>
+                <button type="submit" class="tag_btn btn-warning" value="Trail Running">Trail Running</button>
+                <button type="submit" value="Birding" onclick = >Birding</button>
+                <button type="submit" value="Hiking">Hiking</button>
+                <button type="submit" value="Nature Trips">Nature Trips</button>
+                <button type="submit" value="Paddle Sports">Paddle Sports</button>
+                <button type="submit" value="Rock Climbing">Rock Climbing</button>
+                <button type="submit" value="Snowshoeing">Snowshoeing</button>
+                <button type="submit" value="Walking">Walking</button>
             <br>
 
             <h3>with a starting altitude greater than </h3>
-            <input id="start_altitude_lb" type="text" name="start_altitude_lb" value= "{{request.form.start_altitude_lb}}" size = "10" placeholder="ft">
+            <input id="input" type="text" name="search" size = "10" placeholder="ft">
             <h3>and smaller than  </h3> 
-            <input id="start_altitude_ub" type="text" name="start_altitude_ub" value= "{{request.form.start_altitude_ub}}" size="10" placeholder="ft">
+            <input id="input" type="text" name="search" size="10" placeholder="ft">
 
             <br>
             <h3>with route type of  </h3>
@@ -81,7 +74,7 @@
             <br>
 
             <br>
-            <button type="submit" class="btn btn-submit"> Go Find Me Some Amazing Trails! </button>
+            <button type="submit" class="btn btn-info"> Go Find Me Some Amazing Trails! </button>
         </form>
 
 

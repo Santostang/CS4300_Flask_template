@@ -11,17 +11,18 @@
     text-align:center;
 }
 body {
-    /* background-image: url("bg_image.jpg");  */
-    background-image: url("https://www.google.com/search?q=cool+hiking&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi_3a2cv7_aAhVLGt8KHSN3DdUQ_AUICigB&biw=1238&bih=780#imgrc=yDU2CyiukPpHaM:");
+    background-image: url("background.jpg");  
     background-repeat: no-repeat;
     background-size: 100%;
-    /* background-color: lightgreen; */
     padding-top: 15%;
     padding-bottom: 15px;
     font-family: 'Ubuntu', sans-serif;
 }
-h3 {
-    color: grey;
+.title h1{
+    text-align:center;
+}
+.title p{
+    text-align:center;
 }
 .global-search {
     text-align:center;
@@ -46,7 +47,7 @@ h3 {
     border: none
 }
 .step-links a{
-color: #4285F4;
+    color: #4285F4;
 }
 .tag_btn{
     background: #ccc;
