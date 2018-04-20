@@ -6,45 +6,71 @@
 }
 }
 @media (min-width:400px){
-.global-search {
-    padding: 20px 0;
-    text-align:center;
-}
 body {
     background-image: url("background.jpg");  
     background-repeat: no-repeat;
     background-size: 100%;
-    padding-top: 15%;
+    padding-top: 12%;
     padding-bottom: 15px;
     font-family: 'Ubuntu', sans-serif;
 }
+.title{
+    text-align:center;
+}
 .title h1{
     text-align:center;
+    font-size: 72px;
+    color: white;
 }
 .title p{
     text-align:center;
+    font-size: 28px;
+    color: white;
 }
-.global-search {
+.global-search{
+    margin-top: 40px;
     text-align:center;
-    padding:10px;
 }
-.global-search .form-control {
-    size:5;
-    padding: 10px;
+.global-search .form-group {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    width: 100%;
 }
-.global-search * {
-    display:inline-block;
-    margin-bottom:0;
+.global-search .form-group .desc {
+    height: 35px;
+    width: 200px;
+    text-align:right;
+    color: white;
+    margin-right: 20px;
+    position: absolute;
+    left: 220px;
+    display: table-cell; 
+    vertical-align: middle;
+    line-height: 35px;
+    font-size: 25px;
+
 }
+.global-search .form-group .input {
+    height: 35px;
+    vertical-align: baseline;
+    justify-content: center;
+}
+.global-search .form-group .input input{
+    height: 35px;
+    vertical-align: baseline;
+}
+
 }
 .topcorner{
     position:absolute;
     top:2%;
     right:2%;
+    color: white;
 }
 .btn{
     background-color: #4285F4;
-    border: none
+    border: none;
 }
 .step-links a{
     color: #4285F4;
