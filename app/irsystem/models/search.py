@@ -14,7 +14,7 @@ def load_data():
     :return:
     """
     trail = {}
-    reader = csv.DictReader(open('new_trail_info.csv', 'rb'))
+    reader = csv.DictReader(open('trail_info.csv', 'rb'))
     for line in reader:
         trail[line['trail_id']] = line
     return trail
@@ -26,7 +26,7 @@ def clean(string):
 
 def load_reviews():
     reviews = {'all': set([])}
-    reader1 = csv.DictReader(open('new_review3.csv', 'rb'))
+    reader1 = csv.DictReader(open('review1.csv', 'rb'))
     for line in reader1:
         if '' == line['comment']:
             continue
