@@ -14,9 +14,11 @@ def load_data():
     :return:
     """
     trail = {}
-    reader = csv.DictReader(open('ny_trail.csv', 'rb'))
-    for line in reader:
-        trail[line['trail_id']] = line
+    with open('ny_trail.csv', 'rb') as f:
+        reader = csv.DictReader(f)
+        for line in reader:
+            trail[line['trail_id']] = line
+
     return trail
 
 
@@ -25,20 +27,21 @@ def clean(string):
 
 
 def load_reviews():
-    reviews = {'all': set([])}
-    reader1 = csv.DictReader(open('new_review3.csv', 'rb'))
-    for line in reader1:
-        if '' == line['comment']:
-            continue
-        tid = line['trail_id']
-        if tid not in reviews:
-            reviews[tid] = ({}, 0)
-        reviews[tid] = (reviews[tid][0], reviews[tid][1] + 1)
-        for wrd in clean(line['comment']):
-            if wrd not in reviews[tid][0]:
-                reviews[tid][0][wrd] = 0
-            reviews[tid][0][wrd] += 1
-            reviews['all'].add(wrd)
+    reviews = {}#{'all': set([])}
+    with open('new_review3.csv', 'rb') as f:
+        reader1 = csv.DictReader(f)
+        for line in reader1:
+            if '' == line['comment']:
+                continue
+            tid = line['trail_id']
+            if tid not in reviews:
+                reviews[tid] = ({}, 0)
+            reviews[tid] = (reviews[tid][0], reviews[tid][1] + 1)
+            for wrd in clean(line['comment']):
+                if wrd not in reviews[tid][0]:
+                    reviews[tid][0][wrd] = 0
+                reviews[tid][0][wrd] += 1
+                #reviews['all'].add(wrd)
     '''
     reader2 = csv.DictReader(open('review2.csv', 'rb'))
     for line in reader2:
