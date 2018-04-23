@@ -26,7 +26,7 @@ def clean(string):
 
 def load_reviews():
     reviews = {'all': set([])}
-    reader1 = csv.DictReader(open('review1.csv', 'rb'))
+    reader1 = csv.DictReader(open('new_review3.csv', 'rb'))
     for line in reader1:
         if '' == line['comment']:
             continue
