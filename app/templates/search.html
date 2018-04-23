@@ -4,6 +4,13 @@
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
     </head>
+    <!-- <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM&libraries=places"
+    ></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://evanplaice.github.io/jquery-csv/src/jquery.csv.js"></script>
     <body>
 
         <div class="topcorner">
@@ -50,5 +57,125 @@
         {% endif %}
         </form>
     </body>
+    <script>
+        /*
+        Calculate the coordinates for user's input (city, state)
+        */
+        function geocodeAddress(geocoder, resultsMap) {
+            var address = document.getElementById('address').value;
+            geocoder.geocode({'address': address}, function(results, status) {
+                if (status === 'OK') {
+                    // get the coordinates
+                    lat = results[0].geometry.location.lat();
+                    lng = results[0].geometry.location.lng();
+                    console.log([lat, lng])
+                } 
+                // else {
+                //     alert('Geocode was not successful for the following reason: ' + status);
+                // }
+            });
+        }
+        
+        /* 
+            autocomplete for the city search box
+        */
+        var input = document.getElementById('address');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.setComponentRestrictions({'country': "us"});
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+        });
+
+
+        // auto-complete for the trail names
+        $(function() {
+            var test_availableTags = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+            ];
+            // $.ajax({
+            //     url:"/static/trail_info.csv",
+            //     dataType:"text",
+            //     success:function(data)
+            //     {
+            //         objs = $.csv.toObjects(data);
+            //         availableTags = objs.map(objs => objs.trail_name);
+
+            //         defaltValue = "";
+            //         $('#trail_name').autocomplete({
+            //             // autoFocus: true,
+            //             source: availableTags
+            //         }).keyup(function() { // restrict the input to the available trails in the data
+            //             var isValid = false;
+            //             for (i in availableTags) {
+            //                 if (availableTags[i].toLowerCase().match(this.value.toLowerCase())) {
+            //                     isValid = true;
+            //                 }
+            //             }
+            //             if (!isValid) {
+            //                 this.value = defaltValue;
+            //             } else {
+            //                 defaltValue = this.value;
+            //             }
+            //         });
+            //     }
+            // }); 
+
+            
+            defaltValue = "";
+            $('#trail_name').autocomplete({
+                // autoFocus: true,
+                source: test_availableTags
+            }).keyup(function() { // restrict the input to the available trails in the data
+                var isValid = false;
+                for (i in test_availableTags) {
+                    if (test_sxavailableTags[i].toLowerCase().match(this.value.toLowerCase())) {
+                        isValid = true;
+                    }
+                }
+                if (!isValid) {
+                    this.value = defaltValue;
+                } else {
+                    defaltValue = this.value;
+                }
+            });
+        });
+    
+    </script>
 
 </html>
