@@ -39,7 +39,7 @@ body {
 }
 .global-search .form-group .desc {
     height: 35px;
-    width: 200px;
+    width: 220px;
     text-align:right;
     color: white;
     margin-right: 20px;
@@ -48,7 +48,7 @@ body {
     display: table-cell; 
     vertical-align: middle;
     line-height: 35px;
-    font-size: 25px;
+    font-size: 17px;
 
 }
 .global-search .form-group .input {
@@ -60,6 +60,7 @@ body {
     height: 35px;
     vertical-align: baseline;
 }
+
 
 }
 .topcorner{
