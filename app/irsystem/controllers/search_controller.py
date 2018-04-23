@@ -32,4 +32,4 @@ def result():
 		query['distance'] = {request.form['distance'].encode('ascii', 'ignore')}
 	r1 = request.args.get('r1')
 	r2 = request.args.get('r2')
-	return render_template('result2.html')
+	return render_template('result2.html', data = [r1, r2])
