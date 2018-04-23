@@ -39,7 +39,7 @@ def load_reviews():
                 reviews[tid][0][wrd] = 0
             reviews[tid][0][wrd] += 1
             reviews['all'].add(wrd)
-    """
+    
     reader2 = csv.DictReader(open('review2.csv', 'rb'))
     for line in reader2:
         if '' == line['comment']:
@@ -53,7 +53,7 @@ def load_reviews():
                 reviews[tid][0][wrd] = 0
             reviews[tid][0][wrd] += 1
             reviews['all'].add(wrd)
-    """
+    
     
     return reviews
 
