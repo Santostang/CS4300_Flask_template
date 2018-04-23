@@ -1,1 +1,1 @@
-web: python app.py
+web: gunicorn -w 1 --threads 1 app:app
