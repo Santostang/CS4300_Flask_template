@@ -23,7 +23,7 @@
 
         <div class="statement">Trails similar to "xxxx" Near "Ithaca, NY"</div>
 
-        <form class= "global-filter">
+        <form class= "global-filter" method="post">
             <div class="filter-group">
                 <div class="desc">Route Type</div>
                 <div class="input">
@@ -68,11 +68,11 @@
             </div>
         </form>
 
-        <form class= "global-filter">
+        <form class= "global-filter" method="post">
             <div class="filter-group">
                 <div class="desc">Distance</div>
                 <div class="input">
-                    <input id="distance" type="text" name="distance" size="20" placeholder="enter distance in miles">
+                    <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles">
                 </div>
             </div>
             <div class="filter-group">

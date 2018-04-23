@@ -11,7 +11,7 @@ def search():
 	if request.method == "POST":
 		default, reviews = gen_data()
 		query['trail'] = None #request.form['trail_name']
-	  	query['keywords'] = {request.form['keyword'].encode('ascii', 'ignore'):1}
+	  	query['keywords'] = {request.form['keywords'].encode('ascii', 'ignore'):1}
 	  	#query['distance'] = request.form['distance']
 	  	#query['city'] = request.form['city']
 	  	#query['state'] = request.form['state']
@@ -26,6 +26,10 @@ def search():
 
 @irsystem.route('irsystem.result', methods=["GET","POST"])
 def result():
+	query = {}
+	print("great")
+	if request.method == "POST":
+		query['distance'] = {request.form['distance'].encode('ascii', 'ignore')}
 	r1 = request.args.get('r1')
 	r2 = request.args.get('r2')
-	return 'This is the result page. Trail ID is: ' + '</br> </br>' + str(r1) + '</br> </br>' + str(r2)
+	return render_template('result2.html')
