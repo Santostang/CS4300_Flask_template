@@ -1,4 +1,4 @@
-import os, csv, math, re
+import os, csv, math, re, gzip
 import pprint
 from math import radians, cos, sin, asin, sqrt
 
@@ -14,7 +14,7 @@ def load_data():
     :return:
     """
     trail = {}
-    reader = csv.DictReader(open('ny_trail.csv', 'rb'))
+    reader = csv.DictReader(gzip.open('trail_info_compressed.csv'))
     for line in reader:
         trail[line['trail_id']] = line
     return trail
@@ -26,7 +26,7 @@ def clean(string):
 
 def load_reviews():
     reviews = {'all': set([])}
-    reader1 = csv.DictReader(open('review1.csv', 'rb'))
+    reader1 = csv.DictReader(gzip.open('review1_compressed.csv'))
     for line in reader1:
         if '' == line['comment']:
             continue
