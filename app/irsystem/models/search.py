@@ -27,7 +27,7 @@ def load_data():
     :return:
     """
     trail = {}
-    with open('new_trail_info.csv', 'rb') as f:
+    with open('new_trail_info3.csv', 'rb') as f:
         reader = csv.DictReader(f)
         for line in reader:
             trail[line['trail_id']] = line
