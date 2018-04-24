@@ -9,7 +9,7 @@ net_id = "Ilan Filonenko: if56"
 def search():
 	query = {}
 	if request.method == "POST":
-		default, reviews = gen_data()
+		default, reviews,_ = gen_data()
 		query['trail'] = None #request.form['trail_name']
 	  	query['keywords'] = {request.form['keywords'].encode('ascii', 'ignore'):1}
 	  	#query['distance'] = request.form['distance']
@@ -18,9 +18,10 @@ def search():
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
 	  	#print(query)
 	  	ranking = handle_query(query, default, reviews)
-		return redirect(url_for('irsystem.result', r1=ranking[0], r2=ranking[1]))
+		results = {'r' + str(k):ranking[k]['trail_id'] for k in range(10)}
+		return redirect(url_for('irsystem.result',**results))
 	else:
-		default, reviews = gen_data()
+		default, reviews,_ = gen_data()
 		return render_template('search.html')
 
 
@@ -31,6 +32,8 @@ def result():
 	print("great")
 	if request.method == "POST":
 		query['distance'] = {request.form['distance'].encode('ascii', 'ignore')}
-	r1 = request.args.get('r1')
-	r2 = request.args.get('r2')
-	return render_template('result2.html', data = [r1, r2])
+	_, _, trails = gen_data()
+	dat = []
+	for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
+    		dat.append(trails[request.args.get(k)])
+	return render_template('result2.html', data = dat)

@@ -10,7 +10,7 @@ class StaticStore(object):
             trail = load_data()
             reviews = load_reviews()
             default = calc_default(trail,reviews)
-            StaticStore.data = (default, reviews)
+            StaticStore.data = (default, reviews,trail)
         return StaticStore.data
 
 def gen_data():
