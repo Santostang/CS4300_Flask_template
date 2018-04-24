@@ -36,7 +36,7 @@ def load_data():
 
 
 def clean(string):
-    return re.compile("\w+").findall(string.lower())
+    return re.compile("[a-z]+").findall(string.lower())
 
 
 def load_reviews():
@@ -123,8 +123,8 @@ def handle_query(query, default_ranking,reviews):
         valid = filter_tags(valid, query['tags'])
     if 'routetypes' in query:
         valid = filter_routetypes(valid, query['routetypes'])
-    if 'states' in query:
-        valid = filter_states(valid, query['states'])
+    if 'state' in query:
+        valid = filter_states(valid, query['state'])
     ranking = make_ranking(valid, query['trail'], query['keywords'],reviews)
     return ranking
 
@@ -138,7 +138,7 @@ def calc_keyword_similarity(valid, keywords, reviews):
     tmp = [(t, score(reviews[t['trail_id']],keywords)) if t['trail_id'] in reviews else (t,0)
                 for t in valid]
     m = max(tmp, key=lambda l: l[1])
-    return [(a,b/m[1]) for (a,b) in tmp]
+    return [(a,b/m[1]+1) for (a,b) in tmp]
 
 
 def calc_trail_similarity(valid, trail, reviews):
@@ -151,11 +151,13 @@ def calc_trail_similarity(valid, trail, reviews):
         dot = 0
         magT = 0
         magV = 0
-        for f,func in [('avgRating',float), ('difficulty',int), ('duration',int), \
+        for f,func in [('avgRating',float), ('difficulty',float), \
                     ('elevationGain',float), ('elevationMax',float), ('elevationStart',float), ('length',float)]:
             if f not in t or f not in v:
                 continue
             if t[f] is None or v[f] is None:
+                continue
+            if t[f] == '' or v[f] == '':
                 continue
             dot = dot + (func(t[f]) / func(v[f]) if func(t[f]) < func(v[f]) else func(v[f]) / func(t[f]))
             magT = magT + func(t[f]) ** 2
@@ -171,7 +173,7 @@ def calc_trail_similarity(valid, trail, reviews):
                      'Beach', 'ADA']),
                 ('obstacles',
                      ['Rocky', 'Over Grown', 'Bridge Out', 'No Shade', 'Old Growth', 'Washed Out', 'Closed', 'Scramble',
-                     'Muddy', 'Blowdown', 'Private Property', 'Off Trail', 'Snow', 'Bugs'])
+                     'Muddy', 'Blowdown', 'Private Property', 'Off Trail', 'Snow', 'Bugs']),
                 ('routeType',
                      ['Loop', 'Out & Back', 'Point to Point'])
                 ]:
@@ -213,9 +215,10 @@ def make_ranking(valid, trail, keywords, reviews):
         scored = calc_trail_similarity(valid, trail, reviews)
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
     else:
-        kwds = dict(calc_keyword_similarity(valid,keywords,reviews))
-        trls = dict(calc_trail_similarity(valid, trail, reviews))
-        scored = [(t, kwds[t] + trls[t]) for t in valid]
+        kwds = {t['trail_id']:s for t,s in calc_keyword_similarity(valid,keywords,reviews)}
+        trls = {t['trail_id']:s for t,s in calc_trail_similarity(valid, trail, reviews)}
+        scored = [(t, kwds[t['trail_id']] + trls[t['trail_id']]) for t in valid 
+                if t['trail_id'] in kwds and t['trail_id'] in trls]
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
 
 def filter_states(valid, state):
@@ -223,7 +226,7 @@ def filter_states(valid, state):
 
     :return:
     """
-    return [x for x in valid if state in x['states']]
+    return [x for x in valid if state in x['state']]
 
 def filter_distance(valid, query):
     """
