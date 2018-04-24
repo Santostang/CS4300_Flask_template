@@ -8,8 +8,8 @@ class StaticStore(object):
     def get():
         if StaticStore.data == None:
             trail = load_data()
-            default = calc_default(trail)
             reviews = load_reviews()
+            default = calc_default(trail,reviews)
             StaticStore.data = (default, reviews)
         return StaticStore.data
 
@@ -74,24 +74,28 @@ def load_reviews():
     return reviews
 
 
-def score_trail(trail_id, trail):
+def score_trail(trail_id, trail,reviews):
     """
 
     :param trail_id:
     :return:
     """
     if trail['avgRating'] is None or trail['avgRating'] == '':
+        print(trail['trail_id'])
         return trail, 0
-    score = float(trail['avgRating']) * math.log(int(trail['reviewCount']))
+    if trail['trail_id'] not in reviews:
+        print(trail['trail_id'])
+        return trail, 0
+    score = float(trail['avgRating']) * math.log(reviews[trail['trail_id']][1])
     return trail, score
 
 
-def calc_default(trails):
+def calc_default(trails,reviews):
     """
 
     :return:
     """
-    scored = [score_trail(tid, tr) for tid, tr in trails.items()]
+    scored = [score_trail(tid, tr,reviews) for tid, tr in trails.items()]
     sort = sorted(scored, key=lambda tup: tup[1], reverse=True)
     return [i[0] for i in sort]
 
