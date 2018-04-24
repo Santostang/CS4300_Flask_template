@@ -53,3 +53,7 @@ color: #4285F4;
 } .btn:focus{
     background: red;
 }
+.ui-menu .ui-menu-item a{
+    background:grey;
+    height:10px;
+    font-size:8px;}

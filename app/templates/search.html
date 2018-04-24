@@ -128,33 +128,33 @@
             "Scala",
             "Scheme"
             ];
-            // $.ajax({
-            //     url:"/static/trail_info.csv",
-            //     dataType:"text",
-            //     success:function(data)
-            //     {
-            //         objs = $.csv.toObjects(data);
-            //         availableTags = objs.map(objs => objs.trail_name);
+            $.ajax({
+                url:"/static/trail_info.csv",
+                dataType:"text",
+                success:function(data)
+                {
+                    objs = $.csv.toObjects(data);
+                    availableTags = objs.map(objs => objs.trail_name);
 
-            //         defaltValue = "";
-            //         $('#trail_name').autocomplete({
-            //             // autoFocus: true,
-            //             source: availableTags
-            //         }).keyup(function() { // restrict the input to the available trails in the data
-            //             var isValid = false;
-            //             for (i in availableTags) {
-            //                 if (availableTags[i].toLowerCase().match(this.value.toLowerCase())) {
-            //                     isValid = true;
-            //                 }
-            //             }
-            //             if (!isValid) {
-            //                 this.value = defaltValue;
-            //             } else {
-            //                 defaltValue = this.value;
-            //             }
-            //         });
-            //     }
-            // }); 
+                    defaltValue = "";
+                    $('#trail_name').autocomplete({
+                        // autoFocus: true,
+                        source: availableTags
+                    }).keyup(function() { // restrict the input to the available trails in the data
+                        var isValid = false;
+                        for (i in availableTags) {
+                            if (availableTags[i].toLowerCase().match(this.value.toLowerCase())) {
+                                isValid = true;
+                            }
+                        }
+                        if (!isValid) {
+                            this.value = defaltValue;
+                        } else {
+                            defaltValue = this.value;
+                        }
+                    });
+                }
+            }); 
 
             
             defaltValue = "";
