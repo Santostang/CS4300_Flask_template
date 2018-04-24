@@ -2,11 +2,24 @@ import os, csv, math, re
 import pprint
 from math import radians, cos, sin, asin, sqrt
 
+class StaticStore(object):
+    data = None
+    @staticmethod
+    def get():
+        if StaticStore.data == None:
+            trail = load_data()
+            default = calc_default(trail)
+            reviews = load_reviews()
+            StaticStore.data = (default, reviews)
+        return StaticStore.data
+
 def gen_data():
-    trail = load_data()
-    default = calc_default(trail)
-    reviews = load_reviews()
-    return default, reviews
+    return StaticStore.get()
+
+    #trail = load_data()
+    #default = calc_default(trail)
+    #reviews = load_reviews()
+    #return default, reviews
 
 def load_data():
     """

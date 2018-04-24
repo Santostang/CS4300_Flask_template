@@ -20,6 +20,7 @@ def search():
 	  	ranking = handle_query(query, default, reviews)
 		return redirect(url_for('irsystem.result', r1=ranking[0], r2=ranking[1]))
 	else:
+		default, reviews = gen_data()
 		return render_template('search.html')
 
 
