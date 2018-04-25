@@ -419,10 +419,17 @@
                     }
                     ],
                     {name: 'Styled Map'});
-    
+            
+            var zoom_rate = 8;
+            var tmp_state = results[0].state;
+            for (var i = 1; i < results.length; i++) {
+                if (results[i].state != tmp_state) {
+                    zoom_rate = 5;
+                }
+            }        
 
             var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 5,
+              zoom: zoom_rate,
               center: {lat: average(a), lng:average(b)},
               mapTypeControlOptions: {
                 mapTypeIds: ['satellite', 'hybrid', 'terrain',

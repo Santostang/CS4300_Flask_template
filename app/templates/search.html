@@ -8,8 +8,12 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM"></script> -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM&libraries=places"
     ></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> -->
+
+    <script src="//code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="//code.jquery.com/ui/1.8.24/jquery-ui.js"></script>
+
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
     <script src="http://evanplaice.github.io/jquery-csv/src/jquery.csv.js"></script>
     <body>
 
@@ -61,95 +65,78 @@
         </form>
     </body>
     <script>
-        /*
-        Calculate the coordinates for user's input (city, state)
-        */
-        function geocodeAddress(geocoder, resultsMap) {
-            var address = document.getElementById('address').value;
-            geocoder.geocode({'address': address}, function(results, status) {
-                if (status === 'OK') {
-                    // get the coordinates
-                    lat = results[0].geometry.location.lat();
-                    lng = results[0].geometry.location.lng();
-                    console.log([lat, lng])
-                } 
-                // else {
-                //     alert('Geocode was not successful for the following reason: ' + status);
-                // }
-            });
-        }
-        
         /* 
             autocomplete for the city search box
         */
         var input = document.getElementById('address');
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.setComponentRestrictions({'country': "us"});
-        autocomplete.addListener('place_changed', function() {
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                // User entered the name of a Place that was not suggested and
-                // pressed the Enter key, or the Place Details request failed.
-                window.alert("No details available for input: '" + place.name + "'");
-                return;
-            }
+        $( function() {
+            var states = ["New York", "Maine", "Vermont", "New Hampshire", "Massachusetts", "Connecticut",
+                        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Delaware", 
+                        "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+                        "Kansas", "Kentucky", "Louisiana", "Maryland", "Michigan", "Minnesota", 
+                        "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Jersey", 
+                        "New Mexico", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", 
+                        "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", 
+                        "Texas", "Utah", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+            $('#address').autocomplete({
+                // autoFocus: true,
+                source: states
+            })
+        });
 
-            var address = '';
-            if (place.address_components) {
-                address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
+        var states = ["New York", "Maine", "Vermont", "New Hampshire", "Massachusetts", "Connecticut",
+                        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Delaware", 
+                        "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+                        "Kansas", "Kentucky", "Louisiana", "Maryland", "Michigan", "Minnesota", 
+                        "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Jersey", 
+                        "New Mexico", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", 
+                        "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", 
+                        "Texas", "Utah", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+        previousValue = "";
+  
+        $('#near').autocomplete({
+            autoFocus: true,
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(states, request.term);
+                response(results.slice(0,5)); // only display five auto suggestions
+            }
+        }).keyup(function() {
+            var isValid = false;
+            for (i in states) {
+                if (states[i].toLowerCase().match(this.value.toLowerCase())) {
+                    isValid = true;
+                }
+            }
+            if (!isValid) {
+                this.value = previousValue;
+            } else {
+                previousValue = this.value;
             }
         });
 
-
         // auto-complete for the trail names
         $(function() {
-            var test_availableTags = [
-            "ActionScript",
-            "AppleScript",
-            "Asp",
-            "BASIC",
-            "C",
-            "C++",
-            "Clojure",
-            "COBOL",
-            "ColdFusion",
-            "Erlang",
-            "Fortran",
-            "Groovy",
-            "Haskell",
-            "Java",
-            "JavaScript",
-            "Lisp",
-            "Perl",
-            "PHP",
-            "Python",
-            "Ruby",
-            "Scala",
-            "Scheme"
-            ];
-            $.ajax({
-                url:"/static/trail_info.csv",
+            $.ajax({ // read in the trailnames from csv
+                url:"/static/trail_names.csv",
                 dataType:"text",
                 success:function(data)
                 {
-                    objs = $.csv.toObjects(data);
-                    availableTags = objs.map(objs => objs.trail_name);
-
+                    objs = $.csv.toArrays(data);
+                    availableTags = flatten(objs);
                     defaltValue = "";
                     $('#trail_name').autocomplete({
                         // autoFocus: true,
-                        source: availableTags
+                        source: function(request, response) {
+                            var results = $.ui.autocomplete.filter(availableTags, request.term);
+                            response(results.slice(0,10)); // only display five auto suggestions
+                        }
                     }).keyup(function() { // restrict the input to the available trails in the data
                         var isValid = false;
                         for (i in availableTags) {
                             if (availableTags[i].toLowerCase().match(this.value.toLowerCase())) {
                                 isValid = true;
                             }
-                        }
+                        }   
                         if (!isValid) {
                             this.value = defaltValue;
                         } else {
@@ -158,27 +145,19 @@
                     });
                 }
             }); 
-
-            
-            defaltValue = "";
-            $('#trail_name').autocomplete({
-                // autoFocus: true,
-                source: test_availableTags
-            }).keyup(function() { // restrict the input to the available trails in the data
-                var isValid = false;
-                for (i in test_availableTags) {
-                    if (test_sxavailableTags[i].toLowerCase().match(this.value.toLowerCase())) {
-                        isValid = true;
-                    }
-                }
-                if (!isValid) {
-                    this.value = defaltValue;
-                } else {
-                    defaltValue = this.value;
-                }
-            });
         });
-    
+        
+        function flatten(ary) {
+            var ret = [];
+            for(var i = 0; i < ary.length; i++) {
+                if(Array.isArray(ary[i])) {
+                    ret = ret.concat(flatten(ary[i]));
+                } else {
+                    ret.push(ary[i]);
+                }
+            }
+            return ret;
+        }
     </script>
 
 </html>

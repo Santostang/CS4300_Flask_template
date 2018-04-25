@@ -81,10 +81,8 @@ def score_trail(trail_id, trail,reviews):
     :return:
     """
     if trail['avgRating'] is None or trail['avgRating'] == '':
-        print(trail['trail_id'])
         return trail, 0
     if trail['trail_id'] not in reviews:
-        print(trail['trail_id'])
         return trail, 0
     score = float(trail['avgRating']) * math.log(reviews[trail['trail_id']][1])
     return trail, score
@@ -138,7 +136,7 @@ def calc_keyword_similarity(valid, keywords, reviews):
     tmp = [(t, score(reviews[t['trail_id']],keywords)) if t['trail_id'] in reviews else (t,0)
                 for t in valid]
     m = max(tmp, key=lambda l: l[1])
-    return [(a,b/m[1]+1) for (a,b) in tmp]
+    return [(a,b/(m[1]+1)) for (a,b) in tmp]
 
 
 def calc_trail_similarity(valid, trail, reviews):
@@ -245,12 +243,8 @@ def filter_length(valid, length):
 
     :return:
     """
-    if length[0] is None:
-        return [x for x in valid if float(x['length']) <= float(length[1])]
-    elif length[1] is None:
-        return [x for x in valid if float(x['length']) > float(length[0])]
-    else:
-        return [x for x in valid if float(length[1]) >= float(x['length']) > float(length[0])]
+    length_mile = float(length)*1600
+    return [x for x in valid if length_mile+1600 >= float(x['length']) > length_mile-1600]
 
 def filter_difficulty(valid, difficulty):
     """
