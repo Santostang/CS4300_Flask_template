@@ -264,8 +264,7 @@
                 a.push(parseFloat(results[i].latitude));
                 b.push(parseFloat(results[i].longitude));
             }
-            
-            //console.log(results);
+
             //
             for (var i = 0; i < results.length; i++) {
                 //set background images
@@ -402,10 +401,17 @@
                     }
                     ],
                     {name: 'Styled Map'});
-    
+            
+            var zoom_rate = 8;
+            var tmp_state = results[0].state;
+            for (var i = 1; i < results.length; i++) {
+                if (results[i].state != tmp_state) {
+                    zoom_rate = 5;
+                }
+            }        
 
             var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 5,
+              zoom: zoom_rate,
               center: {lat: average(a), lng:average(b)},
               mapTypeControlOptions: {
                 mapTypeIds: ['satellite', 'hybrid', 'terrain',
@@ -460,7 +466,7 @@
             });
             
             map.mapTypes.set('styled_map', styledMapType);
-            map.setMapTypeId('styled_map');
+            map.setMapTypeId('terrain');
           }
 
           // helper: get the mean of array of floats
