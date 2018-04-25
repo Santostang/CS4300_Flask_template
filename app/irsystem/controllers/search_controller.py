@@ -20,6 +20,7 @@ def search():
 					query['trail'] = t
 					print('found')
 					break
+		keyword = request.form['keywords']
 		kwds = {}
 		for word in clean(request.form['keywords'].encode('ascii', 'ignore')):
 			if word not in kwds:
@@ -34,12 +35,16 @@ def search():
 	  	#query['city'] = request.form['city']
 	  	if request.form['near'] != '':
 	  		query['state'] = request.form['near']
-	  		print(query['state'])
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
-	  	#print(query)
+	  	print(query)
 	  	ranking = handle_query(query, default, reviews)
 		results = {'r' + str(k):ranking[k]['trail_id'] for k in range(10)}
-		print(ranking[0])
+		results['trail_name'] = query['trail']
+		results['keywords'] = keyword
+		if 'state' in query:
+			results['state'] = query['state']
+		else:
+			results['state'] = None
 		return redirect(url_for('irsystem.result',**results))
 	else:
 		default, reviews,_ = gen_data()
@@ -52,9 +57,37 @@ def result():
 	query = {}
 	print("great")
 	if request.method == "POST":
-		query['distance'] = {request.form['distance'].encode('ascii', 'ignore')}
-	_, _, trails = gen_data()
-	dat = []
-	for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
-    		dat.append(trails[request.args.get(k)])
-	return render_template('result2.html', data = dat)
+		query = {}
+		if request.args.get('trail_name') is not None:
+			query['trail'] = request.args.get('trail_name').encode('ascii', 'ignore')
+		else:
+			query['trail'] = None
+		if request.args.get('keywords') is not None:
+			kwds = {}
+			for word in clean(request.args.get('keywords').encode('ascii', 'ignore')):
+				if word not in kwds:
+					kwds[word] = 0
+				kwds[word] += 1
+			if len(kwds) > 0:
+				query['keywords'] = kwds
+			else:
+				query['keywords'] = None
+		if request.args.get('state') is not None:
+			query['state'] = request.args.get('state').encode('ascii', 'ignore')
+		print(query['keywords'])
+		if request.form['distance'] is not None:
+			query['length'] = request.form['distance'].encode('ascii', 'ignore')
+		print(query['length'])
+
+		default, reviews, trails = gen_data()
+		print(query)
+		ranking = handle_query(query, default, reviews)
+		return render_template('result2.html', data = ranking[:10])
+	else:
+		_, _, trails = gen_data()
+		dat = []
+		for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
+	    		dat.append(trails[request.args.get(k)])
+		return render_template('result2.html', data = dat)
+
+
