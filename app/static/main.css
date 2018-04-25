@@ -43,8 +43,6 @@ body {
     text-align:right;
     color: white;
     margin-right: 20px;
-    position: absolute;
-    left: 220px;
     display: table-cell; 
     vertical-align: middle;
     line-height: 35px;

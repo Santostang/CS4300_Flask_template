@@ -7,21 +7,13 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <!-- Latest compiled and minified CSS -->
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM&callback=initMap"></script>
 
         <link rel="stylesheet" href="/static/static.css">
     </head>
-    <style>
-        #map {
-          height: 400px;
-          width: 80%;
-         }
-    </style>
-     <script async defer
-     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ3UAqTqrfEAjaYLv9Gsiuaml5yho1UIM&callback=initMap">
-     </script>
     <body>
 
-        <div class="statement">Trails similar to "xxxx" Near "xxxxx"</div>
+        <div class="statement">Filter the results based on your search</div>
         <form>
             <!-- {% if  data %}
                <h1>{{output_message}}</h1> 
@@ -36,6 +28,7 @@
                 <div class="desc">Route Type</div>
                 <div class="input">
                     <select id="route_type">
+                      <option value="" selected></option>
                       <option value="Loop">Loop</option>
                       <option value="Out & Back">Out & Back</option>
                       <option value="Point to Point">Point to Point</option>
@@ -46,6 +39,7 @@
                 <div class="desc">Activities</div>
                 <div class="input">
                     <select class="selectpicker">
+                        <option value="" selected></option>
                         <option value="Snowshoeing">Snowshoeing</option>
                         <option value="Surfing">Surfing</option>
                         <option value="Cross Country Skiing">Cross Country Skiing</option>
@@ -71,14 +65,15 @@
             <div class="filter-group">
                 <div class="desc">Difficulty</div>
                 <div class="input">
-                    <input id="difficulty" type="range" min="1" max="7" value="1" step="2" >
+                    <input name="diffInput" id="diffInputId" type="range" min="1" max="7" value="1" step="2" oninput="diffOutputId.value = diffInputId.value">
+                    <output name="diffOutput" id="diffOutputId">1</output>
                 </div>
             </div>
         </form>
 
         <form class= "global-filter" method="post">
             <div class="filter-group">
-                <div class="desc">Distance</div>
+                <div class="desc">Trail length</div>
                 <div class="input">
                     <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles">
                 </div>
@@ -93,167 +88,195 @@
             <button type="submit" class="btn btn-info"> filter</button>
         </form>
 
+        <div style="margin-left: 15px;font-weight: bold;">10/10000 results</div>
         <div class="output">
-            <ol>
-                <li id = "0" class="sortable">
-                    <div class="trail-result-card0" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11058345/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="http://alltrails.com/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Taughannock Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+            <div class="list">
+                <ol>
+                    <li id="0" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11058345/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="http://alltrails.com/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Taughannock Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "1" class="sortable">
-                    <div class="trail-result-card1" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/10235890/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Finger Lakes Trail </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "1" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/10235890/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Finger Lakes Trail </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "2" class="sortable">
-                    <div class="trail-result-card2" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "2" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "3" class="sortable">
-                    <div class="trail-result-card3" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11058345/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Taughannock Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "3" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11058345/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Taughannock Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "4" class="sortable">
-                    <div class="trail-result-card4" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/10235890/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Finger Lakes Trail </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "4" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/10235890/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Finger Lakes Trail </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "5" class="sortable">
-                    <div class="trail-result-card5" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "5" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "6" class="sortable">
-                    <div class="trail-result-card6" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "6" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "7" class="sortable">
-                    <div class="trail-result-card7" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "7" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "8" class="sortable">
-                    <div class="trail-result-card8" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span>
+                    </li>
+                    <li id = "8" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li id = "9" class="sortable">
-                    <div class="trail-result-card9" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width: 900px;">
-                        <div class="item">
-                            <h3 class="name short">
-                                <a id="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
-                            </h3>
-                            <div class="difficulty-info">
-                                <!-- <span class="diff easy selected" style="color:white;">EASY</span>
-                                <span class="review-count" style="color:white;">(214)</span> -->
+                    </li>
+                    <li id = "9" class="sortable">
+                        <div class="trail-result-card" style="background-image:linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://www.alltrails.com/api/alltrails/photos/11565107/image?size=extra_large&api_key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i);background-repeat:no-repeat;background-position:center center;height:100px;width:100%;">
+                            <div class="item">
+                                <h3 class="name short">
+                                    <a class="name short link" href="/trail/us/new-york/taughannock-falls?ref=result-card" style="color:white;">Wells Falls </a>
+                                </h3>
+                                <div class="difficulty-info">
+                                    <span class="avgRating" style="color:white;">Rating:4</span> | 
+                                    <span class="difficulty" style="color:white;">5</span> | 
+                                    <span class="length" style="color:white;">4.1 miles</span> |
+                                    <span class="city" style="color:white;">City</span>
+                                </div>
+                                <div class="overview"></div>
                             </div>
                         </div>
-                    </div>
-                </li>
-            </ol>
+                    </li>
+                </ol>
+            </div>
+            <div class="showmap">
+                <div id="map" style="height: 400px"></div>
+            <div>
         </div>
-        <div id="map"></div>
+
+        
+
         <script>
             var results = []; // json object with the top ten results
-            var keys = ["trail_name", "avgRating", "difficulty","longitude", "photo_hash", "latitude",
-                     "state", "routeType", "photo_id", "overview"];
             var photo_head1 = "https://cdn-assets.alltrails.com/uploads/photo/image/"; // add photo_hash + .jpg
             var photo_head2 = "/extra_large_"
             // get the result request response
             '{% for d in data %}'
-                var tmp = '{{d}}'.replace(new RegExp("&#39;", "g"), "").split(',');
-                // console.log(tmp)
-                var tmp_obj = {};
-                for (var i = 0; i < tmp.length; i++) {
-                    for (var j = 0; j< keys.length; j++) {
-                        // console.log(keys[j])
-                        if (tmp[i].indexOf(keys[j])>=0) {
-                            var value = tmp[i].split(":");
-                            if (keys[j] == "overview") {
-                                tmp_obj[keys[j]] = value[1] + ", " + tmp[i+1];
-                            }
-                            else {
-                                tmp_obj[keys[j]] = value[1];
-                            }
-                        }
-                    }
-                    // console.log("the tmp_obj is ", tmp_obj)
+                var tmp = '{{d}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
+
+                var found = tmp.match(/\'\[.*?\]\'/g);
+                for (var i=0; i < found.length; i++){
+                    f = found[i].replace(/\"/g,'');
+                    tmp = tmp.replace(found[i], f);
                 }
+                tmp = tmp.replace(/\'/g, '"')
+                tmp_obj = JSON.parse(tmp);
+
                 results.push(tmp_obj);
             '{% endfor %}'
 
@@ -264,28 +287,22 @@
                 a.push(parseFloat(results[i].latitude));
                 b.push(parseFloat(results[i].longitude));
             }
-            
-            //console.log(results);
+
             //
             for (var i = 0; i < results.length; i++) {
                 //set background images
-                console.log(results[i].trail_name)
-                document.getElementsByClassName("trail-result-card" + i)[0].style.backgroundImage =  "linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(" + photo_head1 + parseInt(results[i].photo_id) + photo_head2 + results[i].photo_hash.substring(1, results[i].photo_hash.length -1) + ".jpg)"
-                document.getElementsByClassName("name short")[i].textContent = results[i].trail_name;
-                document.getElementsByClassName("name short")[i].style="color:white;"
-                state = results[i].state.toLowerCase().substr(1).split(" ");
-                if (state.length > 1) {
-                    state = state[0] + "-" + state[1];
-                }
-                var names = results[i].trail_name.substr(1).toLowerCase().split(" ");
-                var name = "";
-                for (var j = 0; j< names.length-1; j++) {
-                    name += names[j] + "-";
-                }
-                name += names[names.length -1];
-                // console.log(name)
-                // console.log(document.getElementsByClassName("name short")[i].getElementsByTagName("a"));
-                document.getElementsByClassName("name short")[i].getElementsByTagName("a").href="http://alltrails.com/explore/trail/us/" + state + "/" + name;
+                document.getElementsByClassName("trail-result-card")[i].style.backgroundImage =  "linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(" + photo_head1 + parseInt(results[i].photo_id) + photo_head2 + results[i].photo_hash + ".jpg)"
+                document.getElementsByClassName("name short link")[i].textContent = results[i].trail_name;
+
+                state = results[i].state.toLowerCase().replace(/ /g, "-");
+                name = results[i].trail_name.trim().toLowerCase().replace(/ /g, "-").replace(/[/\[\]]/g, "");
+                document.getElementsByClassName("name short link")[i].href="http://alltrails.com/explore/trail/us/" + state + "/" + name;
+
+                document.getElementsByClassName("avgRating")[i].textContent = "Rating: " + results[i].avgRating + "/5.0";
+                document.getElementsByClassName("city")[i].textContent = results[i].city + ", " + results[i].state;
+                document.getElementsByClassName("difficulty")[i].textContent = "Difficulty: " + parseInt(results[i].difficulty) + "/7";
+                document.getElementsByClassName("length")[i].textContent = "Lenght: "  + (results[i].length * 0.00062137119223733).toFixed(1) + " miles";
+                // document.getElementsByClassName("overview")[i].textContent = results[i].overview;
             }
             
 
@@ -459,7 +476,7 @@
                 })
             });
             
-            map.mapTypes.set('styled_map', styledMapType);
+            map.mapTypes.set('styled_map', 'terrain');
             map.setMapTypeId('styled_map');
           }
 

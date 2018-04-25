@@ -29,18 +29,21 @@
                 <div class="input">
                     <input id="trail_name" type="text" name="trail_name" size="60" value= "{{request.form.trail_name}}" placeholder="Enter a trail name ">
                 </div>
+                <div class="desc"></div>
             </div>
             <div class="form-group">
                 <div class="desc">With keywords</div>
                 <div class="input">
                     <input id="keywords" type="text" name="keywords" size="60" value= "{{request.form.keywords}}" placeholder="Trail Charateristics (e.g. Waterfall)">
                 </div>
+                <div class="desc"></div>
             </div>
             <div class="form-group">
-                <div class="desc">Near</div>
+                <div class="desc">In</div>
                 <div class="input">
-                    <input id="near" type="text" name="near" size="60" value= "{{request.form.near}}" placeholder="city, state">
+                    <input id="near" type="text" name="near" size="60" value= "{{request.form.near}}" placeholder="Enter a state">
                 </div>
+                <div class="desc"></div>
             </div>
 
             <button type="submit" class="btn btn-info"> Search</button>

@@ -11,11 +11,9 @@
     text-align:center;
 }
 body {
-    /* background-image: url("bg_image.jpg");  */
     background-image: url("https://www.google.com/search?q=cool+hiking&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi_3a2cv7_aAhVLGt8KHSN3DdUQ_AUICigB&biw=1238&bih=780#imgrc=yDU2CyiukPpHaM:");
     background-repeat: no-repeat;
     background-size: 100%;
-    /* background-color: lightgreen; */
     padding-top: 15%;
     padding-bottom: 15px;
     font-family: 'Ubuntu', sans-serif;

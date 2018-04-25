@@ -1,31 +1,45 @@
 body {
     padding-top: 15px;
     padding-bottom: 15px;
-}
+    background: #fffde4;
+ }
 .statement{
+    margin-left: 10px;
     margin-bottom: 10px;
     font-size: 25px;
     font-weight: 600; 
 }
 
 .global-filter{
-    /*text-align:center;*/
+    margin-left: 10px;
     display: flex;
 }
 .global-filter .filter-group {
     display: flex;
-    /*justify-content: center;*/
     width: 328px;
 }
 .global-filter .filter-group .desc {
     width: 110px;
     text-align:left;
-    /*margin-right: 10px;*/
     font-size: 17px;
 }
 
 .output{
-    margin-top: 30px;
+    width: 100%;
+    display: flex;
+}
+.list{
+    width: 55%;
+    margin-right: 30px;
+
+}
+.showmap{
+    margin-top: 10px;
+    height:400px;
+    width: 43%;
+    position: fixed;
+    right:10px;
+    top:175px;
 }
 ol {
     padding: 0;
@@ -34,6 +48,6 @@ li {
     padding-left: 16px;
     padding-bottom: 10px;
 }
-
-
+.trail-result-card{
+    color: white;
 }
