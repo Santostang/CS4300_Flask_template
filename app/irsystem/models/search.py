@@ -138,7 +138,7 @@ def calc_keyword_similarity(valid, keywords, reviews):
     tmp = [(t, score(reviews[t['trail_id']],keywords)) if t['trail_id'] in reviews else (t,0)
                 for t in valid]
     m = max(tmp, key=lambda l: l[1])
-    return [(a,b/m[1]+1) for (a,b) in tmp]
+    return [(a,b/(m[1]+1)) for (a,b) in tmp]
 
 
 def calc_trail_similarity(valid, trail, reviews):
