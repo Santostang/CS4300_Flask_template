@@ -116,7 +116,7 @@ def handle_query(query, default_ranking,reviews):
     if 'max_altitude' in query:
         valid = filter_max_altitude(valid, query['elevationMax'])
     if 'change_altitude' in query:
-        valid = filter_change_altitude(valid, query['elevationGain'])
+        valid = filter_change_altitude(valid, query['change_altitude'])
     if 'tags' in query:
         valid = filter_tags(valid, query['tags'])
     if 'routetypes' in query:
@@ -287,26 +287,21 @@ def filter_change_altitude(valid, change_altitude):
 
     :return:
     """
-    if change_altitude[0] is None:
-        return [x for x in valid if float(x['elevationGain']) <= float(change_altitude[1])]
-    elif change_altitude[1] is None:
-        return [x for x in valid if float(x['elevationGain']) > float(change_altitude[0])]
-    else:
-        return [x for x in valid if float(change_altitude[1]) >= float(x['elevationGain']) > float(change_altitude[0])]
+    return [x for x in valid if float(change_altitude)+100 >= float(x['elevationGain']) > float(change_altitude)-100]
 
 def filter_tags(valid, tag):
     """
 
     :return:
     """
-    return [x for x in valid if tag in x['features'] or x['activities'] or x['obstacles']]
+    return [x for x in valid if tag in x['activities']]
 
 def filter_routetypes(valid, routetypes):
     """
 
     :return:
     """
-    return [x for x in valid if routetypes in x['rountType']]
+    return [x for x in valid if routetypes in x['routeType']]
 
 def haversine(lon1, lat1, lon2, lat2):
     """

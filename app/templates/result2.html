@@ -14,78 +14,70 @@
     <body>
 
         <div class="statement">Filter the results based on your search</div>
-        <form>
-            <!-- {% if  data %}
-               <h1>{{output_message}}</h1> 
-                {% for d in data %}  
-                    
-                    <p>{{d}}</p>
-                {% endfor %}
-            {% endif %}  -->
-        </form>
-        <form class= "global-filter" method="post">
-            <div class="filter-group">
-                <div class="desc">Route Type</div>
-                <div class="input">
-                    <select id="route_type">
-                      <option value="" selected></option>
-                      <option value="Loop">Loop</option>
-                      <option value="Out & Back">Out & Back</option>
-                      <option value="Point to Point">Point to Point</option>
-                    </select>
-                </div>
-            </div>
-            <div class="filter-group">
-                <div class="desc">Activities</div>
-                <div class="input">
-                    <select class="selectpicker">
-                        <option value="" selected></option>
-                        <option value="Snowshoeing">Snowshoeing</option>
-                        <option value="Surfing">Surfing</option>
-                        <option value="Cross Country Skiing">Cross Country Skiing</option>
-                        <option value="Fishing">Fishing</option>
-                        <option value="Horseback Riding">Horseback Riding</option>
-                        <option value="Scenic Driving">Scenic Driving</option>
-                        <option value="Off Road Driving">Off Road Driving</option>
-                        <option value="Skiing">Skiing</option>
-                        <option value="Paddle Sports">Paddle Sports</option>
-                        <option value="Walking">Walking</option>
-                        <option value="Hiking">Hiking</option>
-                        <option value="Camping">Camping</option>
-                        <option value="Mountain Biking">Mountain Biking</option>
-                        <option value="Birding">Birding</option>
-                        <option value="Trail Running">Trail Running</option>
-                        <option value="Backpacking">Backpacking</option>
-                        <option value="Road Biking">Road Biking</option>
-                        <option value="Rock Climbing">Rock Climbing</option>
-                        <option value="Nature Trips">Nature Trips</option>
-                    </select>
-                </div>
-            </div>
-            <div class="filter-group">
-                <div class="desc">Difficulty</div>
-                <div class="input">
-                    <input name="diffInput" id="diffInputId" type="range" min="1" max="7" value="1" step="2" oninput="diffOutputId.value = diffInputId.value">
-                    <output name="diffOutput" id="diffOutputId">1</output>
-                </div>
-            </div>
-        </form>
 
         <form class= "global-filter" method="post">
-            <div class="filter-group">
-                <div class="desc">Trail length</div>
-                <div class="input">
-                    <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles">
+            <div class="formline">
+                <div class="filter-group">
+                    <div class="desc">Route Type</div>
+                    <div class="input">
+                        <select class="selectpicker" id="route_type" name="route_type">
+                          <option value="" selected></option>
+                          <option value="Loop">Loop</option>
+                          <option value="Out & Back">Out & Back</option>
+                          <option value="Point to Point">Point to Point</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="desc">Activities</div>
+                    <div class="input">
+                        <select class="selectpicker" id="activities" name="activities">
+                            <option value="" selected></option>
+                            <option value="Snowshoeing">Snowshoeing</option>
+                            <option value="Surfing">Surfing</option>
+                            <option value="Cross Country Skiing">Cross Country Skiing</option>
+                            <option value="Fishing">Fishing</option>
+                            <option value="Horseback Riding">Horseback Riding</option>
+                            <option value="Scenic Driving">Scenic Driving</option>
+                            <option value="Off Road Driving">Off Road Driving</option>
+                            <option value="Skiing">Skiing</option>
+                            <option value="Paddle Sports">Paddle Sports</option>
+                            <option value="Walking">Walking</option>
+                            <option value="Hiking">Hiking</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Mountain Biking">Mountain Biking</option>
+                            <option value="Birding">Birding</option>
+                            <option value="Trail Running">Trail Running</option>
+                            <option value="Backpacking">Backpacking</option>
+                            <option value="Road Biking">Road Biking</option>
+                            <option value="Rock Climbing">Rock Climbing</option>
+                            <option value="Nature Trips">Nature Trips</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="desc">Difficulty</div>
+                    <div class="input">
+                        <input name="difficulty" id="difficulty" type="range" min="1" max="7" value="0" step="2" oninput="diffOutputId.value = diffInputId.value">
+                        <output name="diffOutput" id="diffOutputId">1</output>
+                    </div>
                 </div>
             </div>
-            <div class="filter-group">
-                <div class="desc">Elevation Gain</div>
-                <div class="input">
-                    <input id="elevation_gain" type="text" name="elevation_gain" size="20" placeholder="enter number in feet">
+            <div class="formline">
+                <div class="filter-group">
+                    <div class="desc">Trail length</div>
+                    <div class="input">
+                        <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles">
+                    </div>
                 </div>
-            </div>
-
-            <button type="submit" class="btn btn-info"> filter</button>
+                <div class="filter-group">
+                    <div class="desc">Elevation Gain</div>
+                    <div class="input">
+                        <input id="elevation_gain" type="text" name="elevation_gain" size="20" value= "{{request.form.elevation_gain}}" placeholder="enter number in feet">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info"> filter</button>
+            </div>            
         </form>
 
         <div style="margin-left: 15px;font-weight: bold;">10/10000 results</div>
@@ -429,7 +421,7 @@
             }        
 
             var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: zoom_rate,
+              zoom: zoom_rate-1,
               center: {lat: average(a), lng:average(b)},
               mapTypeControlOptions: {
                 mapTypeIds: ['satellite', 'hybrid', 'terrain',

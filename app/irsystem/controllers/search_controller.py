@@ -74,10 +74,18 @@ def result():
 				query['keywords'] = None
 		if request.args.get('state') is not None:
 			query['state'] = request.args.get('state').encode('ascii', 'ignore')
-		print(query['keywords'])
-		if request.form['distance'] is not None:
+
+		if request.form['distance'] != '':
 			query['length'] = request.form['distance'].encode('ascii', 'ignore')
-		print(query['length'])
+
+		if request.form['elevation_gain'] != '':
+			query['change_altitude'] = request.form['elevation_gain'].encode('ascii', 'ignore')
+		
+		if request.form.get("route_type") is not None or request.form.get("route_type") != '':
+			query['routetypes'] = request.form["route_type"].encode('ascii', 'ignore')
+
+		if request.form.get("activities") is not None or request.form.get("activities") != '':
+			query['tags'] = request.form["activities"].encode('ascii', 'ignore')
 
 		default, reviews, trails = gen_data()
 		print(query)

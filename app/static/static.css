@@ -12,10 +12,12 @@ body {
 
 .global-filter{
     margin-left: 10px;
+}
+.formline{
     display: flex;
 }
 .global-filter .filter-group {
-    display: flex;
+    /*display: flex;*/
     width: 328px;
 }
 .global-filter .filter-group .desc {
@@ -50,4 +52,7 @@ li {
 }
 .trail-result-card{
     color: white;
+}
+.btn{
+    height: 40px;
 }
