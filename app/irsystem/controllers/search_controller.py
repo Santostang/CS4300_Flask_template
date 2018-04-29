@@ -6,8 +6,8 @@ import re
 project_name = "Ilan's Cool Project Template"
 net_id = "Ilan Filonenko: if56"
 
-def get_results(query, default, reviews, keyword):
-	ranking = handle_query(query, default, reviews)
+def get_results(query, default, reviews, svds, keyword):
+	ranking = handle_query(query, default, reviews, svds)
 	results = {}
 	for k in range(10):
 		if k >= len(ranking):
@@ -31,7 +31,7 @@ def get_results(query, default, reviews, keyword):
 def search():
 	query = {}
 	if request.method == "POST":
-		default, reviews,_ = gen_data()
+		default, reviews,_,svds = gen_data()
 		query['trail'] = None
 		#query['trail'] = request.form['trail_name']
 		if request.form['trail_name'] != '':
@@ -58,12 +58,12 @@ def search():
 	  	if request.form['near'] != '':
 	  		query['state'] = request.form['near'].encode('ascii', 'ignore')
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
-		results = get_results(query,default,reviews,keyword)
+		results = get_results(query,default,reviews,svds,keyword)
 		#results = {('r' + str(k):ranking[k]['trail_id']) if k < len(ranking) else ('r'+str(k):None) for k in range(10)}
 		print(results)
 		return redirect(url_for('irsystem.result',**results))
 	else:
-		default, reviews,_ = gen_data()
+		default, reviews,_,_ = gen_data()
 		return render_template('search.html')
 
 
@@ -71,7 +71,7 @@ def search():
 @irsystem.route('irsystem.result', methods=["GET","POST"])
 def result():
 	query = {}
-	default, reviews,trails = gen_data()
+	default, reviews,trails,svds = gen_data()
 	if request.method == "POST":
 		query = {}
 		if request.args.get('trail_name') is not None:
@@ -110,7 +110,7 @@ def result():
 			query['tags'] = request.form["activities"].encode('ascii', 'ignore')
 
 		print(query)
-		results = get_results(query,default,reviews,keyword)
+		results = get_results(query,default,reviews,svds,keyword)
 		dat = [results['found'],results['display']]
 		for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
     			print(results[k])

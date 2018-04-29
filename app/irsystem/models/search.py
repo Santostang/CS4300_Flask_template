@@ -8,9 +8,10 @@ class StaticStore(object):
     def get():
         if StaticStore.data == None:
             trail = load_data()
-            reviews = load_reviews()
+            reviews = load_reviews(trail)
             default = calc_default(trail,reviews)
-            StaticStore.data = (default, reviews,trail)
+            svd = load_svd(trail)
+            StaticStore.data = (default, reviews,trail, svd)
         return StaticStore.data
 
 def gen_data():
@@ -39,7 +40,7 @@ def clean(string):
     return re.compile("[a-z]+").findall(string.lower())
 
 
-def load_reviews():
+def load_reviews(trails):
     reviews = {}#{'all': set([])}
     with open('trail_review_final.csv', 'rb') as f:
         reader1 = csv.DictReader(f)
@@ -47,6 +48,8 @@ def load_reviews():
             if '' == line['comment']:
                 continue
             tid = line['trail_id']
+            if tid not in trails:
+                continue
             if tid not in reviews:
                 reviews[tid] = ({}, 0)
             reviews[tid] = (reviews[tid][0], reviews[tid][1] + 1)
@@ -73,6 +76,17 @@ def load_reviews():
     
     return reviews
 
+def load_svd(trails):
+    svd = {}
+    with open('svd.csv', 'rb') as f:
+        reader1 = csv.DictReader(f)
+        for line in reader1:
+            if line['trail_id'] in trails:
+                svd['trail_id'] = []
+                for i in range(35):
+                    svd['trail_id'].append(line[str(i)])
+    return svd
+
 
 def score_trail(trail_id, trail,reviews):
     """
@@ -98,7 +112,7 @@ def calc_default(trails,reviews):
     return [i[0] for i in sort]
 
 
-def handle_query(query, default_ranking,reviews):
+def handle_query(query, default_ranking,reviews,svds):
     """
 
     :param query:
@@ -125,7 +139,7 @@ def handle_query(query, default_ranking,reviews):
     if 'state' in query:
         valid = filter_states(valid, query['state'])
     print('total trails', len(valid))
-    ranking = make_ranking(valid, query['trail'], query['keywords'],reviews)
+    ranking = make_ranking(valid, query['trail'], query['keywords'],reviews,svds)
     print('total trails', len(ranking))
     return ranking
 
@@ -142,7 +156,15 @@ def calc_keyword_similarity(valid, keywords, reviews):
     return [(a,b/(m[1]+1)) for (a,b) in tmp]
 
 
-def calc_trail_similarity(valid, trail, reviews):
+def calc_trail_similarity(valid, trail, svds):
+    def score_svd(t,k):
+        dot = 0
+        for i in range(len(t)):
+            dot = dot + t[i]*k[i]
+        dot = dot / len(t) / len(k)
+        tmag = math.sqrt(sum([x*x for x in t]))
+        kmag = math.sqrt(sum([y*y for y in k]))
+        return dot / (tmag * kmag)
     def score_rev(twords, kwords):
         dot = sum([kwords[0][w]*twords[0][w] for w in kwords[0] if w in twords[0]]) / twords[1] / kwords[1]
         tmag = math.sqrt(sum([twords[0][w]*twords[0][w] for w in twords[0]]))
@@ -197,16 +219,18 @@ def calc_trail_similarity(valid, trail, reviews):
         if vr is None or tr is None:
             print('fail')
             return 0
+        
+        ssvd = score_svd(tr,vr)
         srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
-        return (srev + stra) / 2.0
-    print(trail)
-    return [(t, score(t,reviews.get(t['trail_id'],None),
-                     trail,reviews.get(trail['trail_id'],None)))
+        return (ssvd + stra) / 2.0
+    trail_svd = svds.get(trail['trail_id'],None)
+    return [(t, score(t,svds.get(t['trail_id'],None),
+                     trail,trail_svd))
                      for t in valid]
 
 
-def make_ranking(valid, trail, keywords, reviews):
+def make_ranking(valid, trail, keywords, reviews, svds):
     """
 
     :return:
@@ -219,11 +243,11 @@ def make_ranking(valid, trail, keywords, reviews):
         scored = calc_keyword_similarity(valid,keywords,reviews)
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
     elif keywords is None:
-        scored = calc_trail_similarity(valid, trail, reviews)
+        scored = calc_trail_similarity(valid, trail, svds)
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
     else:
         kwds = {t['trail_id']:s for t,s in calc_keyword_similarity(valid,keywords,reviews)}
-        trls = {t['trail_id']:s for t,s in calc_trail_similarity(valid, trail, reviews)}
+        trls = {t['trail_id']:s for t,s in calc_trail_similarity(valid, trail, svds)}
         scored = [(t, kwds[t['trail_id']] + trls[t['trail_id']]) for t in valid 
                 if t['trail_id'] in kwds and t['trail_id'] in trls]
         return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
