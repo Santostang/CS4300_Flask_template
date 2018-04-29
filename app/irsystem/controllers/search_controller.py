@@ -14,12 +14,14 @@ def search():
 		query['trail'] = None
 		#query['trail'] = request.form['trail_name']
 		if request.form['trail_name'] != '':
-			f = re.compile(request.form['trail_name'])
-			for t in default:
-				if f.search(t['trail_name']):
-					query['trail'] = t
-					print('found')
-					break
+			query['trail'] = request.form['trail_name'].encode('ascii', 'ignore')
+			#f = re.compile(request.form['trail_name'])
+			#for t in default:
+				#if f.search(t['trail_name']):
+					#query['trail'] = t
+					#print('found')
+					#break
+			print("lol")
 		keyword = request.form['keywords']
 		kwds = {}
 		for word in clean(request.form['keywords'].encode('ascii', 'ignore')):
