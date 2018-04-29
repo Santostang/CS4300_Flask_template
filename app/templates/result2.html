@@ -258,6 +258,8 @@
             var photo_head1 = "https://cdn-assets.alltrails.com/uploads/photo/image/"; // add photo_hash + .jpg
             var photo_head2 = "/extra_large_"
 
+            var query = '{{query}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');;
+            console.log(query);
             // get the result request response
             var results_count = '{{data[0] }}';
             var display_count = '{{data[1] }}';
