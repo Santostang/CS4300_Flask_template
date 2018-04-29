@@ -258,22 +258,30 @@
             var photo_head1 = "https://cdn-assets.alltrails.com/uploads/photo/image/"; // add photo_hash + .jpg
             var photo_head2 = "/extra_large_"
             // get the result request response
-            '{% for d in data %}'
+            var found = '{{data[0] }}';
+            var display = '{{data[1] }}';
+            var tmp_data = '{{data}}';
+            var count = (tmp_data.match(/NILL/g) || []).length;
+            console.log(tmp_data.length)
+            console.log(count)
+
+            if (count != 10) { // we found something
+                '{% for d in data[2:] %}'
                 var tmp = '{{d}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
+                if (tmp != "NILL") {
+                    var found =  tmp.match(/\'.*?\'/g);
+                    for (var i=0; i < found.length; i++){
+                        f = found[i].replace(/\"/g,'');
+                        tmp = tmp.replace(found[i], f);
+                    }
+                    tmp = tmp.replace(/\'/g, '"')
+                    tmp_obj = JSON.parse(tmp);
 
-                console.log(tmp);
-                var found = tmp.match(/\'.*?\'/g);
-                // console.log(found2);
-                // var found = tmp.match(/\'\[.*?\]\'/g);
-                for (var i=0; i < found.length; i++){
-                    f = found[i].replace(/\"/g,'');
-                    tmp = tmp.replace(found[i], f);
+                    results.push(tmp_obj);
                 }
-                tmp = tmp.replace(/\'/g, '"')
-                tmp_obj = JSON.parse(tmp);
-
-                results.push(tmp_obj);
-            '{% endfor %}'
+                '{% endfor %}'
+            }
+           
 
             console.log(results);
 
