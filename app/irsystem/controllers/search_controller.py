@@ -60,7 +60,6 @@ def search():
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
 		results = get_results(query,default,reviews,svds,keyword)
 		#results = {('r' + str(k):ranking[k]['trail_id']) if k < len(ranking) else ('r'+str(k):None) for k in range(10)}
-		print(results)
 		return redirect(url_for('irsystem.result',**results))
 	else:
 		default, reviews,_,_ = gen_data()
@@ -75,7 +74,7 @@ def result():
 	if request.method == "POST":
 		query = {}
 		if request.args.get('trail_name') is not None:
-			query['trail'] = request.args.get('trail_name').encode('ascii', 'ignore')
+			query['trail_name'] = request.args.get('trail_name').encode('ascii', 'ignore')
 			f = re.compile(request.args.get('trail_name').encode('ascii', 'ignore'))
 			for t in default:
 				if f.search(t['trail_name']):
@@ -116,6 +115,12 @@ def result():
     			print(results[k])
     			if results[k] in trails:
 		    		dat.append(trails[results[k]])
+		if request.args.get('state') is None or request.args.get('state') == '':
+			query['state'] = 'NILL'
+		if request.args.get('trail_name') is None or request.args.get('trail_name') == '':
+			query['trail_name'] = 'NILL'
+		if request.args.get('keywords') is None or request.args.get('keywords') == '':
+			query['keywords'] = 'NILL'
 		return render_template('result2.html', data = dat, query = query)
 	else:
 		dat = [request.args.get('found'),request.args.get('display')]
@@ -123,7 +128,19 @@ def result():
     			print(request.args.get(k))
     			if request.args.get(k) in trails:
 		    		dat.append(trails[request.args.get(k)])
-		print(dat)
-		return render_template('result2.html', data = dat, query = None)
+		query = {}
+		if request.args.get('state') is not None or request.args.get('state') == '':
+			query['state'] = request.args.get('state').encode('ascii', 'ignore')
+		else:
+			query['state'] = 'NILL'
+		if request.args.get('trail_name') is not None or request.args.get('trail_name') == '':
+			query['trail_name'] = request.args.get('trail_name').encode('ascii', 'ignore')
+		else:
+			query['trail_name'] = 'NILL'
+		if request.args.get('keywords') is not None or request.args.get('keywords') == '':
+			query['keywords'] = request.args.get('keywords').encode('ascii', 'ignore')
+		else:
+			query['keywords'] = 'NILL'
+		return render_template('result2.html', data = dat, query = query)
 
 

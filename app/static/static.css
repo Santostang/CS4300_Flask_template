@@ -1,29 +1,42 @@
-body {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    background: #fffde4;
- }
-.statement{
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+body{
+    font-family: 'Ubuntu', sans-serif;
+}
+.title h1{
+    font-size: 28px;
+    color: white;
+}
+.title p{
+    font-size: 28px;
+    color: white;
+}
+#top{
+    background-image: url("background2.jpg");  
+    background-repeat: no-repeat;
+    background-size: 100%;    
+    /*background-color: yellow;*/
+}
+#statement{
     margin-left: 10px;
     margin-bottom: 10px;
-    font-size: 25px;
-    font-weight: 600; 
+    font-size: 21px;
+    color: white; 
 }
 
 .global-filter{
     margin-left: 10px;
-}
-.formline{
     display: flex;
 }
 .global-filter .filter-group {
     /*display: flex;*/
-    width: 328px;
+    width: 190px;
+    padding-right: 10px;
 }
 .global-filter .filter-group .desc {
-    width: 110px;
+    color: white;
+    width: 120px;
     text-align:left;
-    font-size: 17px;
+    font-size: 15px;
 }
 
 .output{
@@ -50,11 +63,12 @@ li {
     padding-left: 16px;
     padding-bottom: 10px;
     display: flex;
+    height: 100px;
 }
 .trail-result-card{
     color: white;
 }
 .btn{
-    margin-top: 15px;
+    margin-top: 10px;
     height: 40px;
 }

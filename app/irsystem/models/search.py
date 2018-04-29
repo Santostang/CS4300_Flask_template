@@ -320,6 +320,7 @@ def filter_change_altitude(valid, change_altitude):
 
     :return:
     """
+    change_altitude = float(change_altitude)*0.3048
     return [x for x in valid if float(change_altitude)+100 >= float(x['elevationGain']) > float(change_altitude)-100]
 
 def filter_tags(valid, tag):

@@ -11,16 +11,17 @@
 
         <link rel="stylesheet" href="/static/static.css">
     </head>
-    <body>
-
-        <div class="statement">Filter results based on your search:</div>
-
-        <form class= "global-filter" method="post">
-            <div class="formline">
+    <body>        
+        <div id ="top" style="height: 180px;margin-bottom: 5px;">
+            <div class='title' style="text-align:center;">
+                <a href="http://trailglefinal.herokuapp.com/" style="font-size: 50px;color: white;">Trailgle</a>
+            </div>
+            <div id="statement"></div>
+            <form class= "global-filter" method="post">
                 <div class="filter-group">
                     <div class="desc">Route Type</div>
                     <div class="input">
-                        <select class="selectpicker" id="route_type" name="route_type">
+                        <select class="selectpicker" id="route_type" name="route_type" style="width: 158px;height: 28px;">
                           <option value="" selected></option>
                           <option value="Loop">Loop</option>
                           <option value="Out & Back">Out & Back</option>
@@ -31,7 +32,7 @@
                 <div class="filter-group">
                     <div class="desc">Activities</div>
                     <div class="input">
-                        <select class="selectpicker" id="activities" name="activities">
+                        <select class="selectpicker" id="activities" name="activities"  style="width: 158px;height: 28px;">
                             <option value="" selected></option>
                             <option value="Snowshoeing">Snowshoeing</option>
                             <option value="Surfing">Surfing</option>
@@ -56,29 +57,20 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <div class="desc">Difficulty</div>
-                    <div class="input">
-                        <input name="difficulty" id="difficulty" type="range" min="1" max="7" value="" step="2" oninput="diffOutputId.value = diffInputId.value">
-                        <output name="diffOutput" id="diffOutputId">1</output>
-                    </div>
-                </div>
-            </div>
-            <div class="formline">
-                <div class="filter-group">
                     <div class="desc">Trail length</div>
                     <div class="input">
-                        <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles">
+                        <input id="distance" type="text" name="distance" size="20" value= "{{request.form.distance}}" placeholder="enter distance in miles" style="font-size: 15px;">
                     </div>
                 </div>
                 <div class="filter-group">
                     <div class="desc">Elevation Gain</div>
                     <div class="input">
-                        <input id="elevation_gain" type="text" name="elevation_gain" size="20" value= "{{request.form.elevation_gain}}" placeholder="enter number in feet">
+                        <input id="elevation_gain" type="text" name="elevation_gain" size="20" value= "{{request.form.elevation_gain}}" placeholder="enter number in feet" style="font-size: 15px;">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-info"> filter</button>
-            </div>            
-        </form>
+                <button type="submit" class="btn btn-info"> filter</button>          
+            </form>
+        </div>
 
         <div style="margin-left: 15px;font-weight: bold;"><span id="result-count"></span></div>
         <div class="output">
@@ -255,11 +247,70 @@
 
         <script>
             var results = []; // json object with the top ten results
+            var query_str = 'Browsing Trails';
             var photo_head1 = "https://cdn-assets.alltrails.com/uploads/photo/image/"; // add photo_hash + .jpg
             var photo_head2 = "/extra_large_"
 
-            var query = '{{query}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');;
-            console.log(query);
+            var query = '{{query}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
+            var found =  query.match(/\'.*?\'/g);
+            if (found){
+                for (var i=0; i < found.length; i++){
+                    f = found[i].replace(/\"/g,'');
+                    query = query.replace(found[i], f);
+                }
+                query = query.replace(/\'/g, '"'); 
+            }
+            query = query.replace(/None/g, '"None"');
+            var query_obj = JSON.parse(query);
+
+            if (query_obj.trail_name != 'NILL'){
+                query_str += " that are similar to " + query_obj.trail_name;
+            }
+            if ((query_obj.keywords != '') || (query_obj.keywords != 'NILL')){
+                if (typeof(query_obj.keywords) == 'string'){
+                    query_str += " with keywords " + query_obj.keywords;
+                } else {
+                    query_str += " with keywords " + Object.keys(query_obj.keywords).toString();
+                }
+                
+            }
+            if (query_obj.state != 'NILL'){
+                query_str += " in " + query_obj.state;
+            }
+            if ((query_obj.trail_name == 'NILL') && ((query_obj.keywords != '') || (query_obj.keywords != 'NILL')) && (query_obj.state == 'NILL')){
+                query_str = "Browsing Best Trails in USA";
+            }
+            document.getElementById("statement").textContent = query_str;
+
+            if (query_obj.routetypes) {
+                var sel = document.getElementById('route_type');
+                var opts = sel.options;
+                for (var opt, j = 0; opt = opts[j]; j++) {
+                    if (opt.value == query_obj.routetypes) {
+                        sel.selectedIndex = j;
+                        break;
+                    }
+                }
+            }
+            if ((query_obj.length) && (query_obj.length != "")) {
+                document.getElementById('distance').value = query_obj.length;
+            }
+            if ((query_obj.change_altitude) && (query_obj.change_altitude != "")) {
+                document.getElementById('elevation_gain').value = query_obj.change_altitude;
+            }
+            if (query_obj.tags) {
+                var sel = document.getElementById('activities');
+                var opts = sel.options;
+                for (var opt, j = 0; opt = opts[j]; j++) {
+                    if (opt.value == query_obj.tags) {
+                        sel.selectedIndex = j;
+                        break;
+                    }
+                }
+            }
+
+
+            console.log(query_obj);
             // get the result request response
             var results_count = '{{data[0] }}';
             var display_count = '{{data[1] }}';
