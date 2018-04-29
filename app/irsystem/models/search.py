@@ -27,11 +27,11 @@ def load_data():
     :return:
     """
     trail = {}
-    with open('new_trail_info3.csv', 'rb') as f:
+    with open('trail_info_final.csv', 'rb') as f:
         reader = csv.DictReader(f)
         for line in reader:
             trail[line['trail_id']] = line
-
+    
     return trail
 
 
@@ -41,7 +41,7 @@ def clean(string):
 
 def load_reviews():
     reviews = {}#{'all': set([])}
-    with open('new_review3.csv', 'rb') as f:
+    with open('trail_review_final.csv', 'rb') as f:
         reader1 = csv.DictReader(f)
         for line in reader1:
             if '' == line['comment']:
@@ -105,6 +105,7 @@ def handle_query(query, default_ranking,reviews):
     :return:
     """
     valid = default_ranking
+    print('total trails', len(valid))
     if 'length' in query:
         valid = filter_length(valid, query['length'])
     if 'distance' in query:
@@ -123,7 +124,9 @@ def handle_query(query, default_ranking,reviews):
         valid = filter_routetypes(valid, query['routetypes'])
     if 'state' in query:
         valid = filter_states(valid, query['state'])
+    print('total trails', len(valid))
     ranking = make_ranking(valid, query['trail'], query['keywords'],reviews)
+    print('total trails', len(ranking))
     return ranking
 
 
@@ -191,12 +194,16 @@ def calc_trail_similarity(valid, trail, reviews):
     def score(vt, vr, tt, tr):
         # trail to trail similarity
         # TODO discuss weighting
+        if vr is None or tr is None:
+            print('fail')
+            return 0
         srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
         return (srev + stra) / 2.0
-    return [(t, score(t,reviews[t['trail_id']],
-                     trail,reviews[trail['trail_id']]))
-           for t in valid if t['trail_id'] in reviews and trail['trail_id'] in reviews]
+    print(trail)
+    return [(t, score(t,reviews.get(t['trail_id'],None),
+                     trail,reviews.get(trail['trail_id'],None)))
+                     for t in valid]
 
 
 def make_ranking(valid, trail, keywords, reviews):
@@ -204,6 +211,8 @@ def make_ranking(valid, trail, keywords, reviews):
 
     :return:
     """
+    if len(valid) == 0:
+        return []
     if trail is None and keywords is None:
         return valid
     elif trail is None:

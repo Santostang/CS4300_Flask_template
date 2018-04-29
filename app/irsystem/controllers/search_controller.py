@@ -6,6 +6,27 @@ import re
 project_name = "Ilan's Cool Project Template"
 net_id = "Ilan Filonenko: if56"
 
+def get_results(query, default, reviews, keyword):
+	ranking = handle_query(query, default, reviews)
+	results = {}
+	for k in range(10):
+		if k >= len(ranking):
+			results['r'+str(k)] = "NILL"
+		else:
+			results['r'+str(k)] = ranking[k]['trail_id']
+	results['found'] = len(ranking)
+	results['display'] = min(10,len(ranking))
+	if 'trail' in query:
+		results['trail_name'] = query['trail']['trail_name']
+	else:
+		results['trail_name'] = None
+	results['keywords'] = keyword
+	if 'state' in query:
+		results['state'] = query['state'].encode('ascii', 'ignore')
+	else:
+		results['state'] = None
+	return results
+
 @irsystem.route('/', methods=['GET', 'POST'])
 def search():
 	query = {}
@@ -14,14 +35,13 @@ def search():
 		query['trail'] = None
 		#query['trail'] = request.form['trail_name']
 		if request.form['trail_name'] != '':
-			query['trail'] = request.form['trail_name'].encode('ascii', 'ignore')
-			#f = re.compile(request.form['trail_name'])
-			#for t in default:
-				#if f.search(t['trail_name']):
-					#query['trail'] = t
-					#print('found')
-					#break
-			print("lol")
+			#query['trail'] = request.form['trail_name'].encode('ascii', 'ignore')
+			f = re.compile(request.form['trail_name'].encode('ascii', 'ignore'))
+			for t in default:
+				if f.search(t['trail_name']):
+					query['trail'] = t
+					print('found')
+					break
 		keyword = request.form['keywords']
 		kwds = {}
 		for word in clean(request.form['keywords'].encode('ascii', 'ignore')):
@@ -36,17 +56,11 @@ def search():
 	  	#query['distance'] = request.form['distance']
 	  	#query['city'] = request.form['city']
 	  	if request.form['near'] != '':
-	  		query['state'] = request.form['near']
+	  		query['state'] = request.form['near'].encode('ascii', 'ignore')
 	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
-	  	print(query)
-	  	ranking = handle_query(query, default, reviews)
-		results = {'r' + str(k):ranking[k]['trail_id'] for k in range(10)}
-		results['trail_name'] = query['trail']
-		results['keywords'] = keyword
-		if 'state' in query:
-			results['state'] = query['state']
-		else:
-			results['state'] = None
+		results = get_results(query,default,reviews,keyword)
+		#results = {('r' + str(k):ranking[k]['trail_id']) if k < len(ranking) else ('r'+str(k):None) for k in range(10)}
+		print(results)
 		return redirect(url_for('irsystem.result',**results))
 	else:
 		default, reviews,_ = gen_data()
@@ -57,13 +71,19 @@ def search():
 @irsystem.route('irsystem.result', methods=["GET","POST"])
 def result():
 	query = {}
-	print("great")
+	default, reviews,trails = gen_data()
 	if request.method == "POST":
 		query = {}
 		if request.args.get('trail_name') is not None:
 			query['trail'] = request.args.get('trail_name').encode('ascii', 'ignore')
+			f = re.compile(request.args.get('trail_name').encode('ascii', 'ignore'))
+			for t in default:
+				if f.search(t['trail_name']):
+					query['trail'] = t
+					break
 		else:
 			query['trail'] = None
+		keyword = request.args.get('keywords')
 		if request.args.get('keywords') is not None:
 			kwds = {}
 			for word in clean(request.args.get('keywords').encode('ascii', 'ignore')):
@@ -89,15 +109,21 @@ def result():
 		if request.form.get("activities") is not None or request.form.get("activities") != '':
 			query['tags'] = request.form["activities"].encode('ascii', 'ignore')
 
-		default, reviews, trails = gen_data()
 		print(query)
-		ranking = handle_query(query, default, reviews)
-		return render_template('result2.html', data = ranking[:10])
-	else:
-		_, _, trails = gen_data()
-		dat = []
+		results = get_results(query,default,reviews,keyword)
+		dat = [results['found'],results['display']]
 		for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
-	    		dat.append(trails[request.args.get(k)])
+    			print(results[k])
+    			if results[k] in trails:
+		    		dat.append(trails[results[k]])
+		return render_template('result2.html', data = dat)
+	else:
+		dat = [request.args.get('found'),request.args.get('display')]
+		for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
+    			print(request.args.get(k))
+    			if request.args.get(k) in trails:
+		    		dat.append(trails[request.args.get(k)])
+		print(dat)
 		return render_template('result2.html', data = dat)
 
 
