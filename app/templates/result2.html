@@ -261,7 +261,10 @@
             '{% for d in data %}'
                 var tmp = '{{d}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
 
-                var found = tmp.match(/\'\[.*?\]\'/g);
+                console.log(tmp);
+                var found = tmp.match(/\'.*?\'/g);
+                // console.log(found2);
+                // var found = tmp.match(/\'\[.*?\]\'/g);
                 for (var i=0; i < found.length; i++){
                     f = found[i].replace(/\"/g,'');
                     tmp = tmp.replace(found[i], f);
@@ -272,7 +275,7 @@
                 results.push(tmp_obj);
             '{% endfor %}'
 
-            console.log(results)
+            console.log(results);
 
             // get the array of latitudes and logitudes
             a = [];// lat
@@ -290,12 +293,12 @@
 
                 state = results[i].state.toLowerCase().replace(/ /g, "-");
                 name = results[i].trail_name.trim().toLowerCase().replace(/ /g, "-").replace(/[/\[\]]/g, "");
-                document.getElementsByClassName("name short link")[i].href="http://alltrails.com/explore/trail/us/" + state + "/" + name;
+                document.getElementsByClassName("name short link")[i].href="http://alltrails.com/trail/us/" + state + "/" + name;
 
                 document.getElementsByClassName("avgRating")[i].textContent = "Rating: " + results[i].avgRating + "/5.0";
                 document.getElementsByClassName("city")[i].textContent = results[i].city + ", " + results[i].state;
                 document.getElementsByClassName("difficulty")[i].textContent = "Difficulty: " + parseInt(results[i].difficulty) + "/7";
-                document.getElementsByClassName("length")[i].textContent = "Lenght: "  + (results[i].length * 0.00062137119223733).toFixed(1) + " miles";
+                document.getElementsByClassName("length")[i].textContent = "Length: "  + (results[i].length * 0.00062137119223733).toFixed(1) + " miles";
                 // document.getElementsByClassName("overview")[i].textContent = results[i].overview;
             }
             
