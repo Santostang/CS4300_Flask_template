@@ -16,7 +16,7 @@ def get_results(query, default, reviews, svds, keyword):
 			results['r'+str(k)] = ranking[k]['trail_id']
 	results['found'] = len(ranking)
 	results['display'] = min(10,len(ranking))
-	if 'trail' in query:
+	if 'trail' in query and query['trail'] is not None:
 		results['trail_name'] = query['trail']['trail_name']
 	else:
 		results['trail_name'] = None
@@ -116,7 +116,7 @@ def result():
     			print(results[k])
     			if results[k] in trails:
 		    		dat.append(trails[results[k]])
-		return render_template('result2.html', data = dat)
+		return render_template('result2.html', data = dat, query = query)
 	else:
 		dat = [request.args.get('found'),request.args.get('display')]
 		for k in ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9']:
@@ -124,6 +124,6 @@ def result():
     			if request.args.get(k) in trails:
 		    		dat.append(trails[request.args.get(k)])
 		print(dat)
-		return render_template('result2.html', data = dat)
+		return render_template('result2.html', data = dat, query = None)
 
 
