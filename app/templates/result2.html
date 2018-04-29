@@ -266,7 +266,7 @@
             if (query_obj.trail_name != 'NILL'){
                 query_str += " that are similar to " + query_obj.trail_name;
             }
-            if ((query_obj.keywords != '') || (query_obj.keywords != 'NILL')){
+            if ((query_obj.keywords != '') && (query_obj.keywords != 'NILL')){
                 if (typeof(query_obj.keywords) == 'string'){
                     query_str += " with keywords " + query_obj.keywords;
                 } else {
@@ -277,7 +277,7 @@
             if (query_obj.state != 'NILL'){
                 query_str += " in " + query_obj.state;
             }
-            if ((query_obj.trail_name == 'NILL') && ((query_obj.keywords != '') || (query_obj.keywords != 'NILL')) && (query_obj.state == 'NILL')){
+            if ((query_obj.trail_name == 'NILL') && ((query_obj.keywords != '') && (query_obj.keywords != 'NILL')) && (query_obj.state == 'NILL')){
                 query_str = "Browsing Best Trails in USA";
             }
             document.getElementById("statement").textContent = query_str;
