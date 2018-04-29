@@ -272,6 +272,8 @@
                 results.push(tmp_obj);
             '{% endfor %}'
 
+            console.log(results)
+
             // get the array of latitudes and logitudes
             a = [];// lat
             b = []; // lng
@@ -459,10 +461,10 @@
                 // '(last visited June 22, 2009).</p>'+
                 // '</div>'+
                 // '</div>';
-                var contentString = results[i].trail_name;
+                var contentString = '<div id="siteNotice" style="height: 150px; width: 350px;">' + '<h5>' + results[i].trail_name + '</h5>' + "<p>" + results[i].overview + "</p>" + "</div>";
     
                 var infowindow = new google.maps.InfoWindow({
-                content: contentString
+                    content: contentString
                 });
     
     
