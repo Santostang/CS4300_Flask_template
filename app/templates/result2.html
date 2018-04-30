@@ -239,7 +239,7 @@
                 </ol>
             </div>
             <div class="showmap">
-                <div id="map" style="height: 400px"></div>
+                <div id="map" style="height: 400px;"></div>
             <div>
         </div>
 
@@ -277,7 +277,7 @@
             if (query_obj.state != 'NILL'){
                 query_str += " in " + query_obj.state;
             }
-            if ((query_obj.trail_name == 'NILL') && ((query_obj.keywords != '') && (query_obj.keywords != 'NILL')) && (query_obj.state == 'NILL')){
+            if ((query_obj.trail_name == 'NILL') && ((query_obj.keywords == '') || (query_obj.keywords == 'NILL')) && (query_obj.state == 'NILL')){
                 query_str = "Browsing Best Trails in USA";
             }
             document.getElementById("statement").textContent = query_str;
