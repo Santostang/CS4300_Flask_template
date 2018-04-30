@@ -42,7 +42,7 @@ def clean(string):
 
 def load_reviews(trails):
     reviews = {}#{'all': set([])}
-    with open('trail_review_final.csv', 'rb') as f:
+    with open('trail_review_final2.csv', 'rb') as f:
         reader1 = csv.DictReader(f)
         for line in reader1:
             if '' == line['comment']:
