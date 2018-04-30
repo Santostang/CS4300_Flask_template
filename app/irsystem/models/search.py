@@ -276,8 +276,11 @@ def filter_length(valid, length):
 
     :return:
     """
-    length_mile = float(length)*1600
-    return [x for x in valid if length_mile+1600 >= float(x['length']) > length_mile-1600]
+    try:
+        length_mile = float(length)*1600
+        return [x for x in valid if length_mile+1600 >= float(x['length']) > length_mile-1600]
+    except:
+        return valid
 
 def filter_difficulty(valid, difficulty):
     """
@@ -320,8 +323,11 @@ def filter_change_altitude(valid, change_altitude):
 
     :return:
     """
-    change_altitude = float(change_altitude)*0.3048
-    return [x for x in valid if float(change_altitude)+100 >= float(x['elevationGain']) > float(change_altitude)-100]
+    try:
+        change_altitude = float(change_altitude)*0.3048
+        return [x for x in valid if float(change_altitude)+100 >= float(x['elevationGain']) > float(change_altitude)-100]
+    except:
+        return valid
 
 def filter_tags(valid, tag):
     """
