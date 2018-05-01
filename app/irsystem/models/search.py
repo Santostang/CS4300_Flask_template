@@ -217,12 +217,15 @@ def calc_trail_similarity(valid, trail, svds):
         # trail to trail similarity
         # TODO discuss weighting
         if vr is None or tr is None:
-            print('fail')
-            return 0
+            ssvd = 0
+        else:
+
         
-        ssvd = score_svd(tr,vr)
-        srev = score_rev(tr,vr)
+            ssvd = score_svd(tr,vr)
+        #srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
+        print("score:")
+        print((ssvd + stra) / 2.0)
         return (ssvd + stra) / 2.0
     trail_svd = svds.get(trail['trail_id'],None)
     return [(t, score(t,svds.get(t['trail_id'],None),
@@ -235,6 +238,7 @@ def make_ranking(valid, trail, keywords, reviews, svds):
 
     :return:
     """
+    print("make_ranking")
     if len(valid) == 0:
         return []
     if trail is None and keywords is None:
