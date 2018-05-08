@@ -220,7 +220,7 @@ def calc_trail_similarity(valid, trail, svds):
 
         
             ssvd = score_svd(tr,vr)
-        # srev = score_rev(tr,vr)
+        #srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
         return (ssvd + stra) / 2.0
     trail_svd = svds.get(trail['trail_id'],None)
@@ -238,7 +238,10 @@ def make_ranking(valid, trail, keywords, reviews, svds):
     if len(valid) == 0:
         return []
     if trail is None and keywords is None:
-        return valid
+        rank = []
+        for t in valid:
+            rank.append([t, 0])
+        return rank
     elif trail is None:
         scored = calc_keyword_similarity(valid,keywords,reviews)
         return [t for t in sorted(scored,key=lambda t: t[1],reverse=True)]
