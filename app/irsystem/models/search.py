@@ -138,9 +138,7 @@ def handle_query(query, default_ranking,reviews,svds):
         valid = filter_routetypes(valid, query['routetypes'])
     if 'state' in query:
         valid = filter_states(valid, query['state'])
-    print('total trails', len(valid))
     ranking = make_ranking(valid, query['trail'], query['keywords'],reviews,svds)
-    print('total trails', len(ranking))
     return ranking
 
 
@@ -224,8 +222,6 @@ def calc_trail_similarity(valid, trail, svds):
             ssvd = score_svd(tr,vr)
         #srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
-        print("score:")
-        print((ssvd + stra) / 2.0)
         return (ssvd + stra) / 2.0
     trail_svd = svds.get(trail['trail_id'],None)
     return [(t, score(t,svds.get(t['trail_id'],None),
@@ -245,16 +241,16 @@ def make_ranking(valid, trail, keywords, reviews, svds):
         return valid
     elif trail is None:
         scored = calc_keyword_similarity(valid,keywords,reviews)
-        return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
+        return [t for t in sorted(scored,key=lambda t: t[1],reverse=True)]
     elif keywords is None:
         scored = calc_trail_similarity(valid, trail, svds)
-        return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
+        return [t for t in sorted(scored,key=lambda t: t[1],reverse=True)]
     else:
         kwds = {t['trail_id']:s for t,s in calc_keyword_similarity(valid,keywords,reviews)}
         trls = {t['trail_id']:s for t,s in calc_trail_similarity(valid, trail, svds)}
         scored = [(t, kwds[t['trail_id']] + trls[t['trail_id']]) for t in valid 
                 if t['trail_id'] in kwds and t['trail_id'] in trls]
-        return [t[0] for t in sorted(scored,key=lambda t: t[1],reverse=True)]
+        return [t for t in sorted(scored,key=lambda t: t[1],reverse=True)]
 
 def filter_states(valid, state):
     """
