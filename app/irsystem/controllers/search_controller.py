@@ -13,6 +13,7 @@ def get_results(query, default, reviews, svds, keyword):
 	results = {}
 	cut = float(random.randint(1,5)) / float(10)
 	print(cut)
+	score_last = 5
 	for k in range(10):
 		if k >= len(ranking):
 			results['r'+str(k)] = "NILL"
@@ -21,9 +22,12 @@ def get_results(query, default, reviews, svds, keyword):
 				score = 0
 			else:
 				score = round(ranking[k][1] / ranking[0][1] * 5 - cut, 1)
+				if score_last - score > 1:
+					score += round((score_last - score) / 1.3, 1)
+				score_last = score
 			print("score: ", score)
-			results['r'+str(k)] = (ranking[k][0]['trail_id'], score)
-			results['rs' + str(k)] = score
+			results['r'+str(k)] = (ranking[k][0]['trail_id'], round(score,1))
+			results['rs' + str(k)] = round(score,1)
 	results['found'] = len(ranking)
 	results['display'] = min(10,len(ranking))
 	if 'trail' in query and query['trail'] is not None:

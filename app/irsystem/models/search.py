@@ -220,7 +220,7 @@ def calc_trail_similarity(valid, trail, svds):
 
         
             ssvd = score_svd(tr,vr)
-        #srev = score_rev(tr,vr)
+        # srev = score_rev(tr,vr)
         stra = score_trail(tt,vt)
         return (ssvd + stra) / 2.0
     trail_svd = svds.get(trail['trail_id'],None)

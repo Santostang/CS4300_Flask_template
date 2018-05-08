@@ -9,15 +9,17 @@ from math import radians, cos, sin, asin, sqrt
 def search():
 	query = {}
 	if request.method == "POST":
-		query['trail'] = None #request.form['trail_name']
-	  	query['keywords'] = {request.form['keyword'].encode('ascii', 'ignore'):1}
-	  	#query['distance'] = request.form['distance']
-	  	#query['city'] = request.form['city']
-	  	#query['state'] = request.form['state']
-	  	#query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
-	  	ranking = handle_query(query, default, reviews)
-	  	return render_template('search.html', data=ranking[:2])
-	  	#return redirect(url_for('result', r1=ranking[0]))
+            query['trail'] =  request.form['trail_name']
+
+            query['keywords'] = {request.form['keyword'].encode('ascii', 'ignore'):1}
+
+            #query['distance'] = request.form['distance']
+            #query['city'] = request.form['city']
+            #query['state'] = request.form['state']
+            #query['start_altitude'] = [request.form['start_altitude_lb'], request.form['start_altitude_ub']]
+            ranking = handle_query(query, default, reviews)
+            return render_template('search.html', data=ranking[:2])
+            #return redirect(url_for('result', r1=ranking[0]))
 
 #@app.route('/result', methods=["GET","POST"])
 def result():
@@ -97,7 +99,6 @@ def calc_default(trails):
 
 def handle_query(query, default_ranking,reviews):
     """
-
     :param query:
     :return:
     """
@@ -323,9 +324,9 @@ def haversine(lon1, lat1, lon2, lat2):
     return miles
 
 if __name__ == "__main__":
-	#trail = load_data()
-  	#default = calc_default(trail)
-  	#reviews = load_reviews()
+	# trail = load_data()
+  	# default = calc_default(trail)
+  	# reviews = load_reviews()
   	print ("Flask app running at http://0.0.0.0:5000")
   	socketio.run(app, host="0.0.0.0", port=5000)
 

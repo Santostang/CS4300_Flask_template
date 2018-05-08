@@ -88,7 +88,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -104,7 +104,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -120,7 +120,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -136,7 +136,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -152,7 +152,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -168,7 +168,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -184,7 +184,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview"> Similarity Score: </div>
                             </div>
                         </div>
                     </li>
@@ -200,7 +200,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -216,7 +216,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -232,7 +232,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"></div>
+                                <div class="overview">Similarity Score:</div>
                             </div>
                         </div>
                     </li>
@@ -247,13 +247,17 @@
 
         <script>
             var results = []; // json object with the top ten results
+            var sim_scores = [];
             var query_str = 'Browsing Trails';
             var photo_head1 = "https://cdn-assets.alltrails.com/uploads/photo/image/"; // add photo_hash + .jpg
             var photo_head2 = "/extra_large_"
-
+            
             var query = '{{query}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
             var found =  query.match(/\'.*?\'/g);
+
+            console.log("query", query)
             if (found){
+                console.log("found is " ,found)
                 for (var i=0; i < found.length; i++){
                     f = found[i].replace(/\"/g,'');
                     query = query.replace(found[i], f);
@@ -309,8 +313,7 @@
                 }
             }
 
-
-            console.log(query_obj);
+            console.log("query object is ", query_obj);
             // get the result request response
             var results_count = '{{data[0] }}';
             var display_count = '{{data[1] }}';
@@ -321,7 +324,9 @@
                 document.getElementById("result-count").textContent = 'Top ' + display_count + '/' +  results_count + ' result';
 
                 '{% for d in data[2:] %}'
-                var tmp = '{{d}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
+                var input = '{{d}}';
+                var tmp = '{{d[0]}}'.replace(/&#39;/g, '"').replace(/&#34;/g, "'").replace(/&amp;/g, '&');
+                var tmp_score = parseFloat('{{d[1]}}');
                 var found =  tmp.match(/\'.*?\'/g);
                 for (var i=0; i < found.length; i++){
                     f = found[i].replace(/\"/g,'');
@@ -331,10 +336,16 @@
                 tmp_obj = JSON.parse(tmp);
 
                 results.push(tmp_obj);
+                // sim scores 
+                if (tmp_score < 0) {
+                    tmp_score = 0;
+                }
+                sim_scores.push(tmp_score);
                 '{% endfor %}'
                
 
-                console.log(results);
+                console.log("the results are ", results);
+                console.log("sim scores are ", sim_scores);
 
                 // get the array of latitudes and logitudes
                 a = [];// lat
@@ -363,6 +374,7 @@
                     document.getElementsByClassName("city")[i].textContent = results[i].city + ", " + results[i].state;
                     document.getElementsByClassName("difficulty")[i].textContent = "Difficulty: " + parseInt(results[i].difficulty) + "/7";
                     document.getElementsByClassName("length")[i].textContent = "Length: "  + (results[i].length * 0.00062137119223733).toFixed(1) + " miles";
+                    document.getElementsByClassName("overview")[i].textContent = "Similarity Score: " + sim_scores[i] + "/5";
                     
                 }
             }
