@@ -120,7 +120,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -136,7 +136,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -152,7 +152,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -168,7 +168,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -184,7 +184,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview"> Similarity Score: </div>
+                                <div class="overview"> </div>
                             </div>
                         </div>
                     </li>
@@ -200,7 +200,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -216,7 +216,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -232,7 +232,7 @@
                                     <span class="length" style="color:white;">4.1 miles</span> |
                                     <span class="city" style="color:white;">City</span>
                                 </div>
-                                <div class="overview">Similarity Score:</div>
+                                <div class="overview"></div>
                             </div>
                         </div>
                     </li>
@@ -356,7 +356,8 @@
                 }
 
                 //
-                for (var i = 0; i < results.length; i++) {
+                // for (var i = 0; i < results.length; i++) {
+                sim_scores.forEach(function(d, i){
                     // make it visible
                     document.getElementsByClassName("sortable")[i].style.visibility = 'visible';
                     document.getElementsByClassName("sortable")[i].style.height = '110px';
@@ -374,9 +375,12 @@
                     document.getElementsByClassName("city")[i].textContent = results[i].city + ", " + results[i].state;
                     document.getElementsByClassName("difficulty")[i].textContent = "Difficulty: " + parseInt(results[i].difficulty) + "/7";
                     document.getElementsByClassName("length")[i].textContent = "Length: "  + (results[i].length * 0.00062137119223733).toFixed(1) + " miles";
-                    document.getElementsByClassName("overview")[i].textContent = "Similarity Score: " + sim_scores[i] + "/5";
+                    if (d != 0) {
+                    document.getElementsByClassName("overview")[i].textContent = "Similarity Score: " + d + "/5";
+                    }
+                })
                     
-                }
+                // }
             }
             
             google.maps.visualRefresh = true;
